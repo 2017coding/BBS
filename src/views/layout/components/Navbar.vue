@@ -6,19 +6,19 @@
         <span class="yh">yh</span>
       </p>
       <navbar-item></navbar-item>
-      <User></User>
+      <user-tool></user-tool>
     </div>
   </div>
 </template>
 
 <script>
 import NavbarItem from './NavbarItem'
-import User from './User'
+import UserTool from './UserTool'
 export default {
   name: 'Navbar',
   components: {
     NavbarItem,
-    User
+    UserTool
   },
   data () {
     return {

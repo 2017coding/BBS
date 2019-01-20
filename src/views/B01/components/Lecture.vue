@@ -97,9 +97,9 @@ export default {
     },
     handleClick (type, data) {
       switch (type) {
-      case 'back':
-      case 'forward':
-        break
+        case 'back':
+        case 'forward':
+          break
       }
     }
   }

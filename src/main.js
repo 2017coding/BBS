@@ -7,6 +7,7 @@ import store from '@/store'
 import 'babel-polyfill' // 编译ES6API
 import 'normalize.css/normalize.css' // 样式初始化
 import ElementUI from 'element-ui'
+import '@/common/js/errorLog' // 错误日志
 import '@/common/style/index.scss' // 自定义样式
 import custom from '@/common/js/custom' // 自定义方法，用于全局调用
 

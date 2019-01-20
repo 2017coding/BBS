@@ -58,9 +58,9 @@ export default {
   methods: {
     handleClick (type, data) {
       switch (type) {
-      case 'click':
-        this.activeItem = data.id
-        break
+        case 'click':
+          this.activeItem = data.id
+          break
       }
     }
   }

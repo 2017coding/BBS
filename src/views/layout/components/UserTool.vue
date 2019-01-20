@@ -1,12 +1,19 @@
 <template>
-  <div class="user">
-    <div class="login" v-if="true">
+  <div class="user-tool">
+    <!-- 未登录显示 -->
+    <div class="login" v-if="false">
       <a class="bt-login" @click="handleClick('login')">立即登录</a>
       <a class="bt-registered" @click="handleClick('registered')">免费注册</a>
     </div>
-    <template v-else>
-    </template>
-    <el-dialog :title="dialogInfo.header[dialogInfo.status]" :visible.sync="dialogInfo.show" width="40%" top="5vh">
+    <!-- 登录后显示 -->
+    <div class="user" v-else>
+      <div class="bt-created">创建<i class="el-icon-caret-bottom"></i></div>
+      <i class="el-icon-bell"></i>
+      <i class="el-icon-message"></i>
+      <span class="avatar"></span>
+    </div>
+    <!-- 登录注册弹窗 -->
+    <el-dialog :title="dialogInfo.header[dialogInfo.status]" :visible.sync="dialogInfo.show" width="560px" top="5vh">
       <el-form :model="form" :rules="rules" ref="form" label-width="140px" style="width: 80%;">
         <template v-for="(item, index) in fieldList[dialogInfo.status]">
           <div class="valid-code" v-if="item.value === 'validCode'" :key="index">
@@ -16,7 +23,7 @@
             <valid-code :validCode.sync="validCode" v-if="dialogInfo.show"></valid-code>
           </div>
           <el-form-item :label="item.key" :prop="item.value" :key="index" v-else>
-            <el-input v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)"></el-input>
+            <el-input :type="item.value === 'password' ? 'password' : ''" v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)"></el-input>
           </el-form-item>
         </template>
       </el-form>
@@ -33,6 +40,35 @@ export default {
     ValidCode
   },
   data () {
+    const checkPhoneOrEmail = (rule, value, callback) => {
+      let checkPhone = this.$validate({label: '手机号 或 Email', value, rules: ['notnull', 'moblie']}),
+        checkEmail = this.$validate({label: '手机号 或 Email', value, rules: ['notnull', 'email']})
+
+      if (!value) {
+        callback(new Error('请输入手机号 或 Email'))
+      } else if (!(checkPhone.result || checkEmail.result)) {
+        callback(new Error('格式必须为手机号 或 Email'))
+      } else {
+        callback()
+      }
+    }
+    const checkValidCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入验证码'))
+      } else if (value.toUpperCase() !== this.validCode.toUpperCase()) {
+        callback(new Error('验证码不正确'))
+      } else {
+        callback()
+      }
+    }
+    const checkPassword = (rule, value, callback) => {
+      let check = this.$validate({label: '密码', value, rules: ['notnull', 'password']})
+      if (!check.result) {
+        callback(new Error(check.message))
+      } else {
+        callback()
+      }
+    }
     return {
       // 表单参数
       validCode: '',
@@ -46,14 +82,14 @@ export default {
       },
       fieldList: {
         login: [
-          {value: 'account', key: '手机号 或 Email', type: 'input', required: true},
-          {value: 'password', key: '密码', type: 'input', required: true}
+          {value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail},
+          {value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword}
         ],
         registered: [
           {value: 'username', key: '你的名字', placeholder: '真实姓名或昵称', type: 'input', required: true},
-          {value: 'account', key: '手机号 或 Email', type: 'input', required: true},
-          {value: 'validCode', key: '验证码', type: 'input', required: true},
-          {value: 'password', key: '密码', type: 'input', required: true}
+          {value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail},
+          {value: 'validCode', key: '验证码', type: 'input', required: true, rules: checkValidCode},
+          {value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword}
         ]
       },
       dialogInfo: {
@@ -101,13 +137,13 @@ export default {
               obj[child.value] = {
                 required: child.required,
                 validator: child.rules,
-                trigger: 'blur'
+                trigger: ['blur', 'change']
               }
             } else {
               obj[child.value] = {
                 required: child.required,
                 message: '请' + type + child.key,
-                trigger: 'blur'
+                trigger: ['blur', 'change']
               }
             }
           }
@@ -133,11 +169,11 @@ export default {
     // 按钮点击
     handleClick (type, data) {
       switch (type) {
-      case 'login':
-      case 'registered':
-        this.dialogInfo.show = true
-        this.dialogInfo.status = type
-        break
+        case 'login':
+        case 'registered':
+          this.dialogInfo.show = true
+          this.dialogInfo.status = type
+          break
       }
     },
     // 按钮提交
@@ -161,7 +197,7 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
-  .user{
+  .user-tool{
     .login{
       font-size: 13px;
       .bt-login, .bt-registered{
@@ -191,16 +227,60 @@ export default {
     }
     .valid-code{
       display: flex;
+      .el-form-item{
+        flex: 1;
+      }
     }
     .bt-confirm{
       margin-top: 20px;
       margin-left: 140px;
       width: calc(80% - 140px);
     }
+    .user{
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      .bt-created{
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        height: 34px;
+        color: #333;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        transition: all .2s linear;
+        &:hover{
+          background: #e6e6e6;
+          border-radius: #adadad;
+        }
+      }
+      .el-icon-bell, .el-icon-message{
+        cursor: pointer;
+        margin: 0 10px;
+        font-size: 20px;
+        &:hover{
+          color: $theme;
+        }
+      }
+      .avatar{
+        margin-left: 10px;
+        cursor: pointer;
+        display: inline-block;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        background-image: url('./../../../assets/image/B01/b5.jpg')
+      }
+    }
   }
 </style>
 <style lang="scss">
-  .user{
+  .user-tool{
     .el-dialog__header{
       background: #f3f3f3;
       overflow: hidden;

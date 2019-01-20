@@ -10,7 +10,7 @@
         <div class="submenu" :key="item.meta.name" style="display: inline-block">
           <div class="menu-name" @mouseover="showNavbarItem('over')" @mouseout="showNavbarItem('out')" @click="showNavbarItem('click')">
             <span>{{item.meta.name}}</span>
-            <i :class="showSubmenu ? 'el-icon-arrow-down icon-rorate-v' : 'el-icon-arrow-down' "></i>
+            <i :class="showSubmenu ? 'el-icon-caret-bottom icon-rorate-v' : 'el-icon-caret-bottom' "></i>
           </div>
           <!-- <navbar-item v-if="child.children&&child.children.length>0" :key=""></navbar-item> -->
           <el-collapse-transition>
@@ -89,7 +89,7 @@ export default {
       padding: 10px 20px;
       cursor: pointer;
     }
-    .el-icon-arrow-down{
+    .el-icon-caret-bottom{
       transform: rotate(0deg);
       transition: transform .3s;
     }

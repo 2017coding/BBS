@@ -90,7 +90,9 @@ function validate (obj) {
           return reg.test(obj.value)
         },
         password: obj => {
+          if (!obj.value) return true
           reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{6,16}$/
+          return reg.test(obj.value)
         }
       }
     },

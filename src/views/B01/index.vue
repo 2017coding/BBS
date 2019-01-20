@@ -3,9 +3,9 @@
     <sidebar></sidebar>
     <page></page>
     <div class="others">
-      <div class="alert-warning">
+      <p class="alert-warning">
         {{`回顾${new Date().getFullYear() - 1}， 你都收获了什么?`}}
-      </div>
+      </p>
       <div class="advertising">
         <img :src="require('@/assets/image/B01/c1.png')" class="advertising-image">
         <p class="desc">想在上方展示你的广告吗</p>
@@ -43,11 +43,16 @@ export default {
       padding: 0 15px;
       width: 25%;
       .alert-warning{
+        cursor: pointer;
         padding: 15px;
         margin-bottom: 20px;
+        font-size: 12px;
         border: 1px solid #faebcc;
         background-color: #fcf8e3;
         border-radius: 4px;
+        &:hover{
+          text-decoration: underline;
+        }
       }
       .advertising{
         margin-bottom: 25px;

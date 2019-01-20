@@ -67,6 +67,7 @@ export default {
     .blog-item{
       margin: 20px 0;
       .article{
+        cursor: pointer;
         display: flex;
         .content{
           margin: 10px 0;

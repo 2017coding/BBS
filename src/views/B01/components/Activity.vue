@@ -76,45 +76,45 @@ export default {
     // 得到月份的英文
     getEngMonth (date) {
       switch (new Date(date).getMonth()) {
-      case 0: return 'JAN'
-      case 1: return 'FEB'
-      case 2: return 'MAR'
-      case 3: return 'APR'
-      case 4: return 'MAY'
-      case 5: return 'JUN'
-      case 6: return 'JUL'
-      case 7: return 'AUG'
-      case 8: return 'SEP'
-      case 9: return 'OCT'
-      case 10: return 'NOV'
-      case 11: return 'DEC'
+        case 0: return 'JAN'
+        case 1: return 'FEB'
+        case 2: return 'MAR'
+        case 3: return 'APR'
+        case 4: return 'MAY'
+        case 5: return 'JUN'
+        case 6: return 'JUL'
+        case 7: return 'AUG'
+        case 8: return 'SEP'
+        case 9: return 'OCT'
+        case 10: return 'NOV'
+        case 11: return 'DEC'
       }
     },
     // 得到星期几
     getWeek (date) {
       let result
       switch (new Date(date).getDay()) {
-      case 0:
-        result = '日'
-        break
-      case 1:
-        result = '一'
-        break
-      case 2:
-        result = '二'
-        break
-      case 3:
-        result = '三'
-        break
-      case 4:
-        result = '四'
-        break
-      case 5:
-        result = '五'
-        break
-      case 6:
-        result = '六'
-        break
+        case 0:
+          result = '日'
+          break
+        case 1:
+          result = '一'
+          break
+        case 2:
+          result = '二'
+          break
+        case 3:
+          result = '三'
+          break
+        case 4:
+          result = '四'
+          break
+        case 5:
+          result = '五'
+          break
+        case 6:
+          result = '六'
+          break
       }
       return `星期${result}`
     }
