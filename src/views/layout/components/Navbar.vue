@@ -21,10 +21,7 @@ export default {
     UserTool
   },
   data () {
-    return {
-      activeIndex: '1',
-      activeIndex2: '1'
-    }
+    return {}
   },
   methods: {
   }
@@ -40,11 +37,11 @@ export default {
     .navbar{
       margin: auto;
       padding: 0 20px;
-      max-width: 1280px;
-      height: 100%;
       display: flex;
       // justify-content: center;
       align-items: center;
+      max-width: 1280px;
+      height: 100%;
       font-size: 16px;
       .logo{
         padding-right: 110px;

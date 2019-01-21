@@ -42,7 +42,9 @@ export default {
     }
   },
   mounted () {
-    this.list = this.routes || router.options.routes
+    this.list = router.options.routes.filter(item => {
+      return item.meta.isMenu
+    })
     // router.options.routes
   },
   methods: {

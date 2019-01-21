@@ -1,7 +1,7 @@
 <template>
   <div class="user-tool">
     <!-- 未登录显示 -->
-    <div class="login" v-if="false">
+    <div class="login" v-if="true">
       <a class="bt-login" @click="handleClick('login')">立即登录</a>
       <a class="bt-registered" @click="handleClick('registered')">免费注册</a>
     </div>
@@ -10,7 +10,7 @@
       <div class="bt-created">创建<i class="el-icon-caret-bottom"></i></div>
       <i class="el-icon-bell"></i>
       <i class="el-icon-message"></i>
-      <span class="avatar"></span>
+      <span class="avatar" :style="`background-image: url(${require('@/assets/image/B01/b5.jpg')})`"></span>
     </div>
     <!-- 登录注册弹窗 -->
     <el-dialog :title="dialogInfo.header[dialogInfo.status]" :visible.sync="dialogInfo.show" width="560px" top="5vh">
@@ -20,7 +20,7 @@
             <el-form-item :prop="item.value">
               <el-input v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)"></el-input>
             </el-form-item>
-            <valid-code :validCode.sync="validCode" v-if="dialogInfo.show"></valid-code>
+            <valid-code :value.sync="validCode" v-if="dialogInfo.show"></valid-code>
           </div>
           <el-form-item :label="item.key" :prop="item.value" :key="index" v-else>
             <el-input :type="item.value === 'password' ? 'password' : ''" v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)"></el-input>
@@ -274,7 +274,6 @@ export default {
         border-radius: 50%;
         background-size: cover;
         background-position: center;
-        background-image: url('./../../../assets/image/B01/b5.jpg')
       }
     }
   }

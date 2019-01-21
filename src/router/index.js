@@ -11,7 +11,7 @@ export default new Router({
       redirect: '/child',
       component: Layout,
       name: '首页',
-      meta: {name: '首页'},
+      meta: {name: '首页', isMenu: true},
       children: [
         {
           path: 'child',
@@ -27,7 +27,7 @@ export default new Router({
       redirect: '/questions/child',
       component: Layout,
       name: '问答',
-      meta: {name: '问答'},
+      meta: {name: '问答', isMenu: true},
       children: [
         {
           path: 'child',
@@ -43,7 +43,7 @@ export default new Router({
       redirect: '/blogs/child',
       component: Layout,
       name: '专栏',
-      meta: {name: '专栏'},
+      meta: {name: '专栏', isMenu: true},
       children: [
         {
           path: 'child',
@@ -59,7 +59,7 @@ export default new Router({
       redirect: '/lives/child',
       component: Layout,
       name: '讲堂',
-      meta: {name: '讲堂'},
+      meta: {name: '讲堂', isMenu: true},
       children: [
         {
           path: 'child',
@@ -75,7 +75,7 @@ export default new Router({
       redirect: '/found/circle',
       component: Layout,
       name: '发现',
-      meta: {name: '发现'},
+      meta: {name: '发现', isMenu: true},
       children: [
         {
           path: 'circle',
@@ -99,6 +99,12 @@ export default new Router({
           meta: {name: '标签'}
         }
       ]
+    },
+    {
+      path: '/write',
+      component: () => import('@/views/create/write/index'),
+      name: '写文章' + +new Date(),
+      meta: {name: '写文章'}
     }
   ]
 })
