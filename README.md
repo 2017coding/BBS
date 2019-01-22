@@ -17,6 +17,7 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+```
 ├── build                      // 构建相关  
 ├── config                     // 配置相关
 ├── node_module                // npm加载所需的项目依赖模块
@@ -40,5 +41,5 @@ npm run build --report
 ├── .gitignore                 // git 忽略项
 ├── index.html                 // html模板
 └── package.json               // package.json
-
+```
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
