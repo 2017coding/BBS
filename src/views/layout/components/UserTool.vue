@@ -27,13 +27,19 @@
           </el-form-item>
         </template>
       </el-form>
-      <el-button class="bt-confirm" type="primary" @click="handleConfirm(dialogInfo.status)">{{dialogInfo.header[dialogInfo.status]}}</el-button>
+      <el-button
+        class="bt-confirm"
+        type="primary"
+        :loading="dialogInfo.btLoading"
+        @click="handleConfirm(dialogInfo.status)">{{dialogInfo.header[dialogInfo.status]}}
+      </el-button>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import ValidCode from '@/components/ValidCode'
+import {registeredApi, loginApi} from '@/api/user'
 export default {
   name: 'user',
   components: {
@@ -180,6 +186,33 @@ export default {
     handleConfirm (type, data) {
       this.$refs.form.validate(valid => {
         if (valid) {
+          let api
+          if (type === 'login') {
+            api = loginApi
+          } else if (type === 'registered') {
+            api = registeredApi
+          } else {
+            return
+          }
+          this.dialogInfo.btLoading = true
+          api(this.form)
+            .then(res => {
+              if (res.success) {
+                // this.$store.dispatch('app/setUserInfo', res)
+                this.dialogInfo.show = false
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: res.message,
+                  type: res.success ? 'success' : 'error',
+                  duration: 3500
+                })
+                this.dialogInfo.btLoading = false
+              }
+            })
+            .catch(() => {
+              this.dialogInfo.btLoading = false
+            })
         }
       })
     },
