@@ -58,5 +58,16 @@ export default {
         }
       }
     }
+    .tags{
+      margin: auto;
+      margin-top: 10px;
+      padding: 0 20px;
+      display: flex;
+      // justify-content: center;
+      align-items: center;
+      max-width: 1280px;
+      height: 100%;
+      font-size: 16px;
+    }
   }
 </style>

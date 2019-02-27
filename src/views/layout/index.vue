@@ -30,5 +30,6 @@ export default {
 <style scoped lang="scss">
   .BBS{
     min-width: 1280px;
+    height: 100%;
   }
 </style>

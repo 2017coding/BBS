@@ -4,7 +4,8 @@
     <page></page>
     <div class="others">
       <p class="alert-warning">
-        {{`回顾${new Date().getFullYear() - 1}， 你都收获了什么?`}}
+        <!-- {{`回顾${new Date().getFullYear() - 1}， 你都收获了什么?`}} -->
+        免费讲座：如何成为一名合格的工程师？
       </p>
       <div class="advertising">
         <img :src="require('@/assets/image/B01/c1.png')" class="advertising-image">
