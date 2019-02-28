@@ -3,7 +3,7 @@ import request from '@/common/js/request'
 // 注册
 export function registeredApi (data) {
   return request({
-    url: '/api/registered',
+    url: '/api/user/registered',
     method: 'post',
     data
   })
@@ -12,7 +12,7 @@ export function registeredApi (data) {
 // 登陆
 export function loginApi (data) {
   return request({
-    url: '/api/login',
+    url: '/api/user/login',
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function loginApi (data) {
 // 得到用户信息
 export function getUserInfoApi (params) {
   return request({
-    url: '/api/Login/GetUserinfo',
+    url: '/api/user/GetUserinfo',
     method: 'get',
     params
   })
@@ -30,7 +30,7 @@ export function getUserInfoApi (params) {
 // 退出登录
 export function loginOutApi (params) {
   return request({
-    url: '/api/Login/WriteLog',
+    url: '/api/user/WriteLog',
     method: 'get',
     params
   })

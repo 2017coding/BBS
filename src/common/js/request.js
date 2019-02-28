@@ -1,13 +1,13 @@
 import axios from 'axios'
 import {Message, MessageBox} from 'element-ui'
 import store from '@/store'
-import {_getToken} from '@/common/js/storage'
+import {_getCookie} from '@/common/js/storage'
 import globalFn from '@/common/js/utils'
 
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 10000 // request timeout
+  timeout: 100000 // request timeout
 })
 
 // 请求拦截器
@@ -15,7 +15,7 @@ service.interceptors.request.use(config => {
   // 设置请求头
   if (store.getters.token) {
     // 让每个请求携带token
-    config.headers['Authorization'] = _getToken()
+    config.headers['Authorization'] = _getCookie('token')
   }
   // 对全局参数做过滤，把不存在的参数删除
   if (config.method === 'post') {

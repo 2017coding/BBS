@@ -1,7 +1,7 @@
 <template>
   <div class="user-tool">
     <!-- 未登录显示 -->
-    <div class="login" v-if="true">
+    <div class="login" v-if="userInfo">
       <a class="bt-login" @click="handleClick('login')">立即登录</a>
       <a class="bt-registered" @click="handleClick('registered')">免费注册</a>
     </div>
@@ -38,7 +38,9 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 import ValidCode from '@/components/ValidCode'
+import {_setCookie} from '@/common/js/storage'
 import {registeredApi, loginApi} from '@/api/user'
 export default {
   name: 'user',
@@ -79,7 +81,7 @@ export default {
       // 表单参数
       validCode: '',
       form: {
-        username: '',
+        name: '',
         account: '',
         validCode: '',
         password: ''
@@ -92,7 +94,7 @@ export default {
           {value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword}
         ],
         registered: [
-          {value: 'username', key: '你的名字', placeholder: '真实姓名或昵称', type: 'input', required: true},
+          {value: 'name', key: '你的名字', placeholder: '真实姓名或昵称', type: 'input', required: true},
           {value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail},
           {value: 'validCode', key: '验证码', type: 'input', required: true, rules: checkValidCode},
           {value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword}
@@ -108,6 +110,11 @@ export default {
         btLoading: false
       }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ])
   },
   watch: {
     'validCode' (val) {
@@ -198,17 +205,20 @@ export default {
           api(this.form)
             .then(res => {
               if (res.success) {
-                // this.$store.dispatch('app/setUserInfo', res)
-                this.dialogInfo.show = false
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: res.message,
-                  type: res.success ? 'success' : 'error',
-                  duration: 3500
-                })
-                this.dialogInfo.btLoading = false
+                if (type === 'login') {
+                  _setCookie('token', res.token)
+                  this.$store.dispatch('user/setUserInfo', res.content.data)
+                } else {
+                  this.dialogInfo.show = true
+                }
               }
+              this.$message({
+                showClose: true,
+                message: res.message,
+                type: res.success ? 'success' : 'error',
+                duration: 3500
+              })
+              this.dialogInfo.btLoading = false
             })
             .catch(() => {
               this.dialogInfo.btLoading = false
@@ -219,7 +229,7 @@ export default {
     // 表单初始化
     resetForm () {
       this.form = {
-        username: '',
+        name: '',
         account: '',
         password: ''
       }
