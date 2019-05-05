@@ -10,7 +10,16 @@
       <div class="bt-created">创建<i class="el-icon-caret-bottom"></i></div>
       <i class="el-icon-bell"></i>
       <i class="el-icon-message"></i>
-      <span class="avatar" :style="`background-image: url(${require('@/assets/image/B01/b5.jpg')})`"></span>
+      <!-- 用户面板 -->
+    <el-popover
+      placement="bottom"
+      title="标题"
+      width="200"
+      trigger="manual"
+      content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+      v-model="visible">
+      <span class="avatar" slot="reference" :style="`background-image: url(${require('@/assets/image/B01/b5.jpg')})`"></span>
+    </el-popover>
     </div>
     <!-- 登录注册弹窗 -->
     <el-dialog :title="dialogInfo.header[dialogInfo.status]" :visible.sync="dialogInfo.show" width="560px" top="5vh">
