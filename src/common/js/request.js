@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {Message, MessageBox} from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import {_getCookie} from '@/common/js/storage'
+import { _getCookie } from '@/common/js/storage'
 import globalFn from '@/common/js/utils'
 
 // create an axios instance
@@ -19,13 +19,13 @@ service.interceptors.request.use(config => {
   }
   // 对全局参数做过滤，把不存在的参数删除
   if (config.method === 'post') {
-    for (let key in config.data) {
+    for (const key in config.data) {
       if (!config.data[key] && config.data[key] !== 0) {
         delete config.data[key]
       }
     }
   } else if (config.method === 'get') {
-    for (let key in config.params) {
+    for (const key in config.params) {
       if (!config.params[key] && config.params[key] !== 0) {
         delete config.params[key]
       }
@@ -43,7 +43,7 @@ service.interceptors.request.use(config => {
         }
       }
     } else if (typeof data === 'object') {
-      for (let key in data) {
+      for (const key in data) {
         if (typeof data[key] === 'object') {
           dataTrim(data[key])
         } else if (typeof data[key] === 'string') {
@@ -91,19 +91,19 @@ service.interceptors.response.use(
       }
       // return Promise.reject('error')
     } else {
-      let data = response.data
+      const data = response.data
       // 对全局的初始时间过滤
       if (data.content && data.content.data) {
         if (Array.isArray(data.content.data)) {
           data.content.data.forEach(item => {
-            for (let key in item) {
+            for (const key in item) {
               if (item[key] === '1900-01-01T00:00:00') {
                 item[key] = ''
               }
             }
           })
         } else {
-          for (let key in data.content.data) {
+          for (const key in data.content.data) {
             if (data.content.data[key] === '1900-01-01T00:00:00') {
               data.content.data[key] = ''
             }
@@ -115,7 +115,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log(error) // for debug
-    let message = error.response ? globalFn.requestError(error.response.status) : '请求超时'
+    const message = error.response ? globalFn.requestError(error.response.status) : '请求超时'
     Message({
       showClose: true,
       message: message,

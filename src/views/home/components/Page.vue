@@ -7,8 +7,8 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <page-head-config></page-head-config>
-    <page-blog-list></page-blog-list>
+    <page-head-config />
+    <page-blog-list />
   </div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
   data () {
     return {
       carouselList: [
-        {src: require('@/assets/image/B01/a1.png')},
-        {src: require('@/assets/image/B01/a2.png')}
+        { src: require('@/assets/image/home/a1.png') },
+        { src: require('@/assets/image/home/a2.png') }
       ]
     }
   }

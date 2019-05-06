@@ -1,8 +1,8 @@
 <template>
   <el-tabs type="card">
-    <el-tab-pane label="" v-for="(item, index) in tabList" :key="index">
-      <span slot="label"><i :class="item.icon"></i>{{item.name}}</span>
-      <div class="">{{item.name}}</div>
+    <el-tab-pane v-for="(item, index) in tabList" :key="index" label="">
+      <span slot="label"><i :class="item.icon" />{{ item.name }}</span>
+      <div class="">{{ item.name }}</div>
     </el-tab-pane>
   </el-tabs>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="write">
-    <div class="header"></div>
-    <mavon-editor class="mavon-editor" v-model="editorValue" :toolbars="toolbars" :subfield="true"/>
+    <div class="header" />
+    <mavon-editor v-model="editorValue" class="mavon-editor" :toolbars="toolbars" :subfield="true" />
   </div>
 </template>
 

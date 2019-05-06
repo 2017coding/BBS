@@ -1,18 +1,18 @@
 <template>
-  <div class="B01">
-    <sidebar></sidebar>
-    <page></page>
-    <div class="others">
+  <div class="home">
+    <sidebar />
+    <page />
+    <div class="right">
       <p class="alert-warning">
         <!-- {{`回顾${new Date().getFullYear() - 1}， 你都收获了什么?`}} -->
         免费讲座：如何成为一名合格的工程师？
       </p>
       <div class="advertising">
-        <img :src="require('@/assets/image/B01/c1.png')" class="advertising-image">
+        <img :src="require('@/assets/image/home/c1.png')" class="advertising-image">
         <p class="desc">想在上方展示你的广告吗</p>
       </div>
-      <lecture></lecture>
-      <activity></activity>
+      <lecture />
+      <activity />
     </div>
   </div>
 </template>
@@ -38,9 +38,9 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
-  .B01{
+  .home{
     display: flex;
-    .others{
+    .right{
       padding: 0 15px;
       width: 25%;
       .alert-warning{

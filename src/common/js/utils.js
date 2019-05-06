@@ -1,4 +1,4 @@
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 
 export default {
   /**
@@ -28,7 +28,7 @@ export default {
    * @return message 返回处理过的提示信息
    */
   requestError: (code, message) => {
-    let statusCode = (code + '').replace(/[^0-9]+/g, '') - 0
+    const statusCode = (code + '').replace(/[^0-9]+/g, '') - 0
 
     switch (statusCode) {
       case 400:
@@ -87,17 +87,15 @@ export default {
    */
   switchTime: (val = +new Date(), dateType = 'YYYY-MM-DD hh:mm:ss') => {
     // 将字符串转换成数字
-    let timeStamp = +new Date(val),
-      dateStr,
-      str
+    const timeStamp = +new Date(val)
 
     // 如果转换成数字出错
     if (!timeStamp) {
       return val
     }
-
+    let str
     // 得到时间字符串
-    dateStr = new Date(timeStamp)
+    const dateStr = new Date(timeStamp)
     str = dateType.replace('YYYY', dateStr.getFullYear())
     str = str.replace('MM', (dateStr.getMonth() + 1 < 10 ? '0' : '') + (dateStr.getMonth() + 1))
     str = str.replace('DD', (dateStr.getDate() < 10 ? '0' : '') + dateStr.getDate())
@@ -118,7 +116,7 @@ export default {
     if (document.getElementById(id)) {
       document.body.removeChild(document.getElementById(id))
     }
-    let a = document.createElement('a')
+    const a = document.createElement('a')
     a.setAttribute('href', url)
     a.setAttribute('download', url)
     a.setAttribute('target', targetType)
@@ -130,10 +128,9 @@ export default {
    * 复制dom的内容
    * @param {String} id dom的ID
    */
-  copyData (id) {
-    let data = document.getElementById(id).innerText,
-      inputDom = document.createElement('input')
-    inputDom.value = data
+  copyData (value) {
+    const inputDom = document.createElement('input')
+    inputDom.value = value
     document.body.appendChild(inputDom)
     inputDom.select() // 选择对象
     document.execCommand('Copy') // 执行浏览器复制命令
@@ -150,6 +147,7 @@ export default {
    *  @param obj.pKey 父字段名称 比如 pid
    *  @param obj.rootPValue 根节点的父字段的值
    *  @param obj.data 需要处理的数据
+   *  @param obj.jsonData 是否深复制数据（默认是true）
    * @return {Array} arr
    */
   getTreeArr: (obj) => {
@@ -157,22 +155,36 @@ export default {
       console.log('getTreeArr=>请传入数组')
       return []
     }
-    let arr = obj.data,
-      arr1 = []
-    // 数据处理
+    obj.jsonData = obj.jsonData === false ? obj.jsonData : true
+    const arr = obj.jsonData ? JSON.parse(JSON.stringify(obj.data)) : obj.data
+    const arr1 = []
+    // 将数据处理成数状结构
     arr.forEach(item => {
+      let index = 0
       item.children = []
       arr.forEach(item1 => {
+        // 得到树结构关系
         if (item[obj.key] === item1[obj.pKey]) {
           item.children.push(item1)
         }
+        // 判断根节点
+        if (item1[obj.key] !== item[obj.pKey]) {
+          index++
+        }
       })
-      // 没有传入根节点的父ID时，默认设为0
-      obj.rootPValue = obj.rootPValue || 0
-      if (item[obj.pKey] === obj.rootPValue) {
+      // 没传入根节点，根据当前数据结构得到根节点
+      if (!('rootPValue' in obj) && index === arr.length) {
         arr1.push(item)
       }
     })
+    // 传入根节点，根据传入的根节点组成树结构
+    if ('rootPValue' in obj) {
+      arr.forEach(item => {
+        if (item[obj.pKey] === obj.rootPValue) {
+          arr1.push(item)
+        }
+      })
+    }
     return arr1
   },
   // 为tree数据结构添加name，好获取子节点至根节点的全部路径 S0812A
@@ -198,15 +210,15 @@ export default {
     if (document.getElementsByClassName('el-table').length === 0) {
       return
     }
-    let boxH = document.body.clientHeight,
-      navH = document.getElementsByClassName('navbar-container')[0].clientHeight,
-      navInfoH = document.getElementsByClassName('nav-info')[0].clientHeight,
-      filterContainer = document.getElementsByClassName('filter-container')[0] || {clientHeight: 0},
-      filterContainerH = filterContainer.clientHeight,
-      pageContainer = document.getElementsByClassName('pagination-container')[0] || {clientHeight: 0},
-      pageContainerH = pageContainer.clientHeight ? pageContainer.clientHeight + 15 : pageContainer.clientHeight - 35,
-      tab = document.getElementsByClassName('el-table')[0] || {offsetTop: 0},
-      tabOffT = tab.offsetTop
+    const boxH = document.body.clientHeight
+    const navH = document.getElementsByClassName('navbar-container')[0].clientHeight
+    const navInfoH = document.getElementsByClassName('nav-info')[0].clientHeight
+    const filterContainer = document.getElementsByClassName('filter-container')[0] || { clientHeight: 0 }
+    const filterContainerH = filterContainer.clientHeight
+    const pageContainer = document.getElementsByClassName('pagination-container')[0] || { clientHeight: 0 }
+    const pageContainerH = pageContainer.clientHeight ? pageContainer.clientHeight + 15 : pageContainer.clientHeight - 35
+    const tab = document.getElementsByClassName('el-table')[0] || { offsetTop: 0 }
+    const tabOffT = tab.offsetTop
 
     // 表格的高度 = 视口高度 - 表格到头部导航的距离 - 头部导航的高度137 - 分页组件的高度100 - 分页组件
     document.getElementsByClassName('el-table')[0].style.height = (boxH - tabOffT - navH - navInfoH - filterContainerH - pageContainerH) + 'px'
@@ -219,6 +231,7 @@ export default {
    * @param {String} staticName 属性不存在时使用的值
    */
   useWhichData (obj, key, staticName) {
+    console.log(obj)
     if (obj && obj[key]) {
       return obj[key]
     } else {
@@ -231,7 +244,7 @@ export default {
    * @param {String} key 作为去重依据的字段 (处理对象数组时需要传入)
    * @return arr 返回处理后的数据
    */
-  handleRepeatArr ({data, key}) {
+  handleRepeatArr ({ data, key }) {
     if (!Array.isArray(data)) {
       console.log('请传入数组')
       return
@@ -259,9 +272,9 @@ export default {
     // return data
 
     /** 2.根据对象的属性不同去重 */
-    let arr = [], obj = {}
+    const arr = []; const obj = {}
     data.forEach((item, index) => {
-      let attr = key ? item[key] : item
+      const attr = key ? item[key] : item
       if (!obj[attr]) {
         obj[attr] = index + 1
         arr.push(item)
@@ -297,5 +310,31 @@ export default {
     //   }
     // }
     // return data
+  },
+  /**
+   * 得到当前主机地址
+   */
+  getHost () {
+    return process.env.NODE_ENV === 'development' ? process.env.excelURL : window.location.origin
+  },
+  /**
+   * 传入搜索框字符串，将问号后面字符得到并转换为对象
+   * @param {String} str
+   * @return {Object}
+   */
+  getLocationSearch (str) {
+    const arr = str.substr(1).split('&'); const obj = {}
+    for (const item of arr) {
+      const data = item.split('=')
+      obj[data[0]] = data[1]
+    }
+    return obj
+  },
+  bytesToSize (bytes) {
+    if (bytes === 0) return '0 B'
+    var k = 1024 // or 1024
+    var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    var i = Math.floor(Math.log(bytes) / Math.log(k))
+    return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i]
   }
 }

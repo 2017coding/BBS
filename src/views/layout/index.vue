@@ -1,16 +1,16 @@
 <template>
   <div class="BBS">
-    <navbar></navbar>
-    <page-wrap></page-wrap>
-    <footerbar></footerbar>
-    <back-to-top></back-to-top>
+    <navbar />
+    <page-wrap />
+    <footerbar />
+    <back-to-top />
   </div>
 </template>
 
 <script>
-import Navbar from './components/navBar'
-import PageWrap from './components/pageWrap'
-import Footerbar from './components/footerBar'
+import Navbar from './components/Navbar'
+import PageWrap from './components/PageWrap'
+import Footerbar from './components/Footerbar'
 import BackToTop from '@/components/BackToTop'
 export default {
   name: 'Layout',
@@ -29,7 +29,6 @@ export default {
 
 <style scoped lang="scss">
   .BBS{
-    min-width: 1280px;
     height: 100%;
   }
 </style>

@@ -4,28 +4,28 @@
       <p class="title">讲座推荐</p>
       <p class="controller">
         <span class="back" @click="handleClick('back')">
-          <i class="el-icon-arrow-left"></i>
+          <i class="el-icon-arrow-left" />
         </span>
         <span class="forward" @click="handleClick('forward')">
-          <i class="el-icon-arrow-right"></i>
+          <i class="el-icon-arrow-right" />
         </span>
       </p>
     </div>
     <div class="carousel">
-      <div class="item" v-for="(item, index) in list" :key="index">
+      <div v-for="(item, index) in list" :key="index" class="item">
         <img :src="item.src" class="img">
-        <p class="title">{{item.title}}</p>
+        <p class="title">{{ item.title }}</p>
         <div class="rate">
           <el-rate
             v-model="item.rate"
             disabled
-            text-color="#ff9900">
-          </el-rate>
-          <span class="nums">{{`(${item.peoples}人参与)`}}</span>
+            text-color="#ff9900"
+          />
+          <span class="nums">{{ `(${item.peoples}人参与)` }}</span>
         </div>
         <div class="price">
-          <span class="before"></span>
-          <span class="now"></span>
+          <span class="before" />
+          <span class="now" />
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@ export default {
     getList () {
       this.list = [
         {
-          src: require('@/assets/image/B01/b1.png'),
+          src: require('@/assets/image/home/b1.png'),
           path: '/',
           title: '学习知识',
           rate: 5,
@@ -55,7 +55,7 @@ export default {
           nowPrice: '599'
         },
         {
-          src: require('@/assets/image/B01/b2.jpg'),
+          src: require('@/assets/image/home/b2.jpg'),
           path: '/',
           title: '学习知识',
           rate: 5,
@@ -64,7 +64,7 @@ export default {
           nowPrice: '599'
         },
         {
-          src: require('@/assets/image/B01/b3.png'),
+          src: require('@/assets/image/home/b3.png'),
           path: '/',
           title: '学习知识',
           rate: 5,
@@ -73,7 +73,7 @@ export default {
           nowPrice: '599'
         },
         {
-          src: require('@/assets/image/B01/b4.png'),
+          src: require('@/assets/image/home/b4.png'),
           path: '/',
           title: '学习知识',
           rate: 5,
@@ -82,7 +82,7 @@ export default {
           nowPrice: '599'
         },
         {
-          src: require('@/assets/image/B01/b5.jpg'),
+          src: require('@/assets/image/home/b5.jpg'),
           path: '/',
           title: '学习知识',
           rate: 5,

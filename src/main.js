@@ -11,19 +11,17 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import '@/common/config/errorLog' // 错误日志
 import '@/common/style/index.scss' // 自定义样式
-import custom from '@/common/js/custom' // 自定义方法，用于全局调用
+import prototype from '@/common/js/prototype' // 自定义方法，用于全局调用
 
 Vue.config.productionTip = false
 
-Vue.use(custom)
+Vue.use(prototype)
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
-})
+  render: h => h(App)
+}).$mount('#app')

@@ -1,15 +1,16 @@
 <template>
-  <div class="B01-sidebar">
+  <div class="home-sidebar">
     <ul class="recommended">
       <li
         v-for="(item, index) in recommended"
         :key="index"
+        :class="item.id === activeItem ? 'item active-item' : 'item'"
         @click="handleClick('click', item)"
-        :class="item.id === activeItem ? 'item active-item' : 'item'">
+      >
         <span class="icon-box">
-          <i :class="item.icon"></i>
+          <i :class="item.icon" />
         </span>
-        <span class="name">{{item.name}}</span>
+        <span class="name">{{ item.name }}</span>
       </li>
     </ul>
     <div class="technology-class">
@@ -18,10 +19,11 @@
         <li
           v-for="(item, index) in technologyClass"
           :key="index"
+          :class="item.id === activeItem ? 'item active-item' : 'item'"
           @click="handleClick('click', item)"
-          :class="item.id === activeItem ? 'item active-item' : 'item'">
+        >
           <span class="icon-box"><img :src="item.icon" class="icon"></span>
-          <span class="name">{{item.name}}</span>
+          <span class="name">{{ item.name }}</span>
         </li>
       </ul>
     </div>
@@ -34,21 +36,21 @@ export default {
     return {
       activeItem: '',
       recommended: [
-        {id: 1, type: '1', name: '为你推荐', icon: 'el-icon-calendar'},
-        {id: 2, type: '1', name: '近期热门', icon: 'el-icon-good'},
-        {id: 3, type: '1', name: '最新内容', icon: 'el-icon-int'}
+        { id: 1, type: '1', name: '为你推荐', icon: 'el-icon-calendar' },
+        { id: 2, type: '1', name: '近期热门', icon: 'el-icon-good' },
+        { id: 3, type: '1', name: '最新内容', icon: 'el-icon-int' }
       ],
       technologyClass: [
-        {id: 4, type: '2', name: '前端', icon: require('@/assets/image/B01/7.png')},
-        {id: 5, type: '2', name: '后端', icon: require('@/assets/image/B01/4.png')},
-        {id: 6, type: '2', name: '小程序', icon: require('@/assets/image/B01/1.png')},
-        {id: 7, type: '2', name: '人工智能', icon: require('@/assets/image/B01/3.png')},
-        {id: 8, type: '2', name: '区块链', icon: require('@/assets/image/B01/10.png')},
-        {id: 9, type: '2', name: '安全', icon: require('@/assets/image/B01/2.png')},
-        {id: 10, type: '2', name: 'Android', icon: require('@/assets/image/B01/5.png')},
-        {id: 11, type: '2', name: 'iOS', icon: require('@/assets/image/B01/6.png')},
-        {id: 13, type: '2', name: '工具', icon: require('@/assets/image/B01/9.png')},
-        {id: 14, type: '2', name: '程序员', icon: require('@/assets/image/B01/8.png')}
+        { id: 4, type: '2', name: '前端', icon: require('@/assets/image/home/7.png') },
+        { id: 5, type: '2', name: '后端', icon: require('@/assets/image/home/4.png') },
+        { id: 6, type: '2', name: '小程序', icon: require('@/assets/image/home/1.png') },
+        { id: 7, type: '2', name: '人工智能', icon: require('@/assets/image/home/3.png') },
+        { id: 8, type: '2', name: '区块链', icon: require('@/assets/image/home/10.png') },
+        { id: 9, type: '2', name: '安全', icon: require('@/assets/image/home/2.png') },
+        { id: 10, type: '2', name: 'Android', icon: require('@/assets/image/home/5.png') },
+        { id: 11, type: '2', name: 'iOS', icon: require('@/assets/image/home/6.png') },
+        { id: 13, type: '2', name: '工具', icon: require('@/assets/image/home/9.png') },
+        { id: 14, type: '2', name: '程序员', icon: require('@/assets/image/home/8.png') }
       ]
     }
   },
@@ -69,9 +71,10 @@ export default {
 
 <style lang="scss" scoped>
   @import '@/common/style/base.scss';
-  .B01-sidebar{
+  .home-sidebar{
     padding: 0 15px;
-    width: 200px;
+    padding-left: 10px;
+    width: 16.66667%;
     .recommended{
       .item{
         .icon-box{

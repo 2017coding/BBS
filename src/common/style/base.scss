@@ -8,3 +8,11 @@ $fontSize1: 14px; // 一般字体大小
 $fontSize2: 18px; // 标题字体大小 
 $fontSize3: 13px; // 内容字体大小 
 $fontSize4: 12px; // 小字体 
+
+$maxWidth: 1140px;
+$minWidth: 1140px;
+
+:export {
+  theme: $theme;
+  textColor: $fontColor1;
+}

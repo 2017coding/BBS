@@ -4,20 +4,20 @@
       <span class="title">活动推荐</span>
       <span class="more">更多</span>
     </div>
-    <div class="item" v-for="(item, index) in list" :key="index">
+    <div v-for="(item, index) in list" :key="index" class="item">
       <div class="time">
-        <p class="month">{{getEngMonth(item.date)}}</p>
-        <p class="day">{{$fn.switchTime(item.date, 'DD')}}</p>
+        <p class="month">{{ getEngMonth(item.date) }}</p>
+        <p class="day">{{ $fn.switchTime(item.date, 'DD') }}</p>
       </div>
       <div class="content">
-        <p class="title">{{item.title}}</p>
+        <p class="title">{{ item.title }}</p>
         <div class="info">
-          <span class="addr">{{item.addr}}</span>
+          <span class="addr">{{ item.addr }}</span>
           <span class="dot">·</span>
-          <span class="date">{{$fn.switchTime(item.date, 'MM-DD')}}</span>
-          <span class="week">{{getWeek(item.date)}}</span>
+          <span class="date">{{ $fn.switchTime(item.date, 'MM-DD') }}</span>
+          <span class="week">{{ getWeek(item.date) }}</span>
           <span class="dot">·</span>
-          <span class="status">{{item.status}}</span>
+          <span class="status">{{ item.status }}</span>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     getList () {
-      let obj = [
+      const obj = [
         {
           date: '2019-01-19',
           title: 'TiDB DevCon 2019：年度最高规格的TiDB技术大会',

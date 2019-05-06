@@ -7,7 +7,7 @@
  *  @param {Array} conditions: 条件字段 例如： ['2', '10'] ,则验证长度错误会提示: 密码的长度在2到10个字符,以传入数组的条件去做验证, 验证的提示{1}开始将匹配的是当前数组
  * @return {obj} { result, message } 验证结果对象
  */
-function validate (obj) {
+export default (obj) => {
   let reg
   const validatorObj = {
     // 验证定义
@@ -21,13 +21,15 @@ function validate (obj) {
         number: '{0}必须是数字',
         string: '{0}必须是字母或者数字',
         moblie: '{0}必须是手机或者电话号码格式',
+        phone: '{0}格式不正确',
         noChinese: '{0}不能为中文',
         lon: '{0}范围为-180.0～+180.0（必须输入1到10位小数）',
         lat: '{0}范围为-90.0～+90.0（必须输入1到10位小数）',
         url: '请输入正确的{0}访问地址',
         repeat: '两次输入的{0}不一致',
         email: '邮箱格式不正确',
-        password: '请输入由大小写字母+数字组成的6-16位密码'
+        password: '请输入由大小写字母+数字组成的6-16位密码',
+        fixedNum: '请输入{1}位数字'
       },
       // 验证的方法, 返回一个布尔值
       methods: {
@@ -48,16 +50,22 @@ function validate (obj) {
         },
         number: obj => {
           if (!obj.value) return true
-          return typeof obj.value === 'number'
+          reg = /^[0-9]*\.?[0-9]*$/
+          return reg.test(obj.value)
         },
         string: obj => {
           if (!obj.value) return true
-          reg = /^[a-zA-Z0-9]+$/
+          reg = /^[a-zA-Z0-9]*$/
           return reg.test(obj.value)
         },
         moblie: obj => {
           if (!obj.value) return true
           reg = /^(1[3,5,8,7]{1}[\d]{9})|(((400)-(\d{3})-(\d{4}))|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{3,7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)$/
+          return reg.test(obj.value)
+        },
+        phone: obj => {
+          if (!obj.value) return true
+          reg = /^1[3,5,8,7]{1}[\d]{9}$/
           return reg.test(obj.value)
         },
         noChinese: obj => {
@@ -67,7 +75,7 @@ function validate (obj) {
         },
         lon: obj => {
           if (!obj.value) return true
-          reg = /^[\-\+]?(0?\d{1,2}\.\d{1,5}|1[0-7]?\d{1}\.\d{1,10}|180\.0{1,10})$/
+          reg = /^[\-\+]?(0?\d{1,2}\.\d{1,10}|1[0-7]?\d{1}\.\d{1,10}|180\.0{1,10})$/
           return reg.test(obj.value)
         },
         lat: obj => {
@@ -93,18 +101,27 @@ function validate (obj) {
           if (!obj.value) return true
           reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{6,16}$/
           return reg.test(obj.value)
+        },
+        fixedNum: obj => {
+          if (!obj.value) return true
+          return obj.value.length === obj.conditions[0]
         }
       }
     },
     // 得到验证结果
     checkResult: function (obj) {
-      let result, checkType, message, validatorMethods, validatorMessage
-      result = true
-      message = '验证成功'
-      validatorMethods = this.validator.methods
-      validatorMessage = this.validator.messages
+      let checkType
+      let result = true
+      let message = '验证成功'
+      const validatorMethods = this.validator.methods
+      const validatorMessage = this.validator.messages
       // 循环验证
       for (let i = 0, len = obj.rules.length; i < len; i++) {
+        // 当验证的规则不存在，默认跳过这个验证
+        if (!validatorMethods[obj.rules[i]]) {
+          console.log(obj.rules[i] + '规则不存在')
+          break
+        }
         // 得到当前验证失败信息
         if (!validatorMethods[obj.rules[i]](obj)) {
           checkType = obj.rules[i]
@@ -121,13 +138,11 @@ function validate (obj) {
           })
         }
         message = message.replace('{0}', obj.label)
-        return {result, message}
+        return { result, message }
       }
 
-      return {result, message}
+      return { result, message }
     }
   }
   return validatorObj.checkResult(obj)
 }
-
-export default validate

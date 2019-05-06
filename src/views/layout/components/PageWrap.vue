@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
@@ -15,12 +15,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import '@/common/style/base.scss';
   .page-wrap{
     position: relative;
-    max-width: 1280px;
+    max-width: $maxWidth;
     min-height: calc(100% - 60px - 75px);
-    margin: 0 auto;
-    margin-top: 20px;
-    padding: 0 20px;
+    margin: auto;
+    margin-top: 30px;
   }
 </style>

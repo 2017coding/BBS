@@ -1,7 +1,7 @@
 import utils from '@/common/js/utils' // 公共方法
 import validate from '@/common/js/validate' // 公共验证
 import config from '@/common/js/config'
-import BUS from '@/common/js/BUS'
+import BUS from '@/common/js/bus'
 
 export default {
   install (Vue, options) {

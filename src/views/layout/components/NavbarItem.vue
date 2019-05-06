@@ -1,16 +1,16 @@
 <template>
   <nav class="menu">
-    <template v-for="item in list">
+    <template v-for="item in routes.filter(item => item.meta.isMenu)">
       <!-- 一级菜单循环 -->
-      <router-link v-if="showingChildren(item) && !item.children[0].children" :to="item.path" :key="item.path">
-        <span class="menu-name">{{item.meta.name}}</span>
+      <router-link v-if="hasOneShowingChildren(item, item.children) && (!item.children[0].children || item.children[0].children.length === 0)" :key="item.path" :to="resolvePath(item)">
+        <span class="menu-title">{{ item.meta.title }}</span>
       </router-link>
       <!-- 多级菜单的循环 -->
       <template v-else>
-        <div class="submenu" :key="item.meta.name" style="display: inline-block">
-          <div class="menu-name" @mouseover="showNavbarItem('over')" @mouseout="showNavbarItem('out')" @click="showNavbarItem('click')">
-            <span>{{item.meta.name}}</span>
-            <i :class="showSubmenu ? 'el-icon-caret-bottom icon-rorate-v' : 'el-icon-caret-bottom' "></i>
+        <div :key="item.meta.title" class="submenu" style="display: inline-block">
+          <div class="menu-title" @mouseover="showNavbarItem('over')" @mouseout="showNavbarItem('out')" @click="showNavbarItem('click')">
+            <span>{{ item.meta.title }}</span>
+            <i :class="showSubmenu ? 'el-icon-caret-bottom icon-rorate-v' : 'el-icon-caret-bottom' " />
           </div>
           <!-- <navbar-item v-if="child.children&&child.children.length>0" :key=""></navbar-item> -->
           <el-collapse-transition>
@@ -25,32 +25,28 @@
 </template>
 
 <script>
-import router from '@/router'
+import { routes } from '@/router'
 export default {
   name: 'NavbarItem',
-  props: {
-    routes: {
-      type: Array
-    }
-  },
   data () {
     return {
-      list: [],
+      routes,
       triggerType: 'click',
       showSubmenu: false,
       timer: []
     }
   },
-  mounted () {
-    this.list = router.options.routes.filter(item => {
-      return item.meta.isMenu
-    })
-    // router.options.routes
-  },
   methods: {
-    showingChildren (data) {
-      // 设置当只有一个子目录的时候并且名字额父级一样时，菜单不展开
-      if (data.children.length === 1 && data.children[0].meta.name === data.meta.name) {
+    resolvePath (item) {
+      return item.path ? item.path + '/' + item.children[0].path : item.children[0].path
+    },
+    hasOneShowingChildren (item, children) {
+      // 判断路由是否显示
+      const showingChildren = children.filter(item => {
+        return !item.hidden
+      })
+      // 设置当只有一个子目录的时候并且名字和父级一样时，菜单不展开
+      if (showingChildren.length === 1 && showingChildren[0].meta.title === item.meta.title) {
         return true
       }
       return false
@@ -64,7 +60,7 @@ export default {
       }
     },
     moveSubmenu (type) {
-      let timer = setTimeout(() => {
+      const timer = setTimeout(() => {
         this.showSubmenu = false
       }, 200)
       this.timer.push(timer)
@@ -87,9 +83,12 @@ export default {
   }
   .menu{
     flex: 1;
-    .menu-name{
+    .menu-title{
       padding: 10px 20px;
       cursor: pointer;
+      &:first-child{
+        padding-left: 15px;
+      }
     }
     .el-icon-caret-bottom{
       transform: rotate(0deg);

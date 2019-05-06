@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="back-to-top" v-if="show" @click="backToTop">
+    <div v-if="show" class="back-to-top" @click="backToTop">
       回顶部
     </div>
   </div>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'backToTop',
+  name: 'BackToTop',
   data () {
     return {
       show: false,
@@ -26,7 +26,7 @@ export default {
       return document.documentElement.scrollTop || document.body.scrollTop
     },
     backToTop () {
-      let currentScroll = this.getScrollTop()
+      const currentScroll = this.getScrollTop()
       if (currentScroll > 0) {
         window.scrollTo(0, currentScroll - this.speed)
         // 加速

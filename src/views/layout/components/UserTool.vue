@@ -1,38 +1,39 @@
 <template>
   <div class="user-tool">
     <!-- 未登录显示 -->
-    <div class="login" v-if="userInfo">
+    <div v-if="!userInfo" class="login">
       <a class="bt-login" @click="handleClick('login')">立即登录</a>
       <a class="bt-registered" @click="handleClick('registered')">免费注册</a>
     </div>
     <!-- 登录后显示 -->
-    <div class="user" v-else>
-      <div class="bt-created">创建<i class="el-icon-caret-bottom"></i></div>
-      <i class="el-icon-bell"></i>
-      <i class="el-icon-message"></i>
+    <div v-else class="user">
+      <div class="bt-created">创建<i class="el-icon-caret-bottom" /></div>
+      <i class="el-icon-bell" />
+      <i class="el-icon-message" />
       <!-- 用户面板 -->
-    <el-popover
-      placement="bottom"
-      title="标题"
-      width="200"
-      trigger="manual"
-      content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-      v-model="visible">
-      <span class="avatar" slot="reference" :style="`background-image: url(${require('@/assets/image/B01/b5.jpg')})`"></span>
-    </el-popover>
+      <!-- <el-popover
+        v-model="visible"
+        placement="bottom"
+        title="标题"
+        width="200"
+        trigger="manual"
+        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+      >
+        <span slot="reference" class="avatar" :style="`background-image: url(${require('@/assets/image/home/b5.jpg')})`" />
+      </el-popover> -->
     </div>
     <!-- 登录注册弹窗 -->
     <el-dialog :title="dialogInfo.header[dialogInfo.status]" :visible.sync="dialogInfo.show" width="560px" top="5vh">
-      <el-form :model="form" :rules="rules" ref="form" label-width="140px" style="width: 80%;">
+      <el-form ref="form" :model="form" :rules="rules" label-width="140px" style="width: 80%;">
         <template v-for="(item, index) in fieldList[dialogInfo.status]">
-          <div class="valid-code" v-if="item.value === 'validCode'" :key="index">
+          <div v-if="item.value === 'validCode'" :key="index" class="valid-code">
             <el-form-item :prop="item.value">
-              <el-input v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)"></el-input>
+              <el-input v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)" />
             </el-form-item>
-            <valid-code :value.sync="validCode" v-if="dialogInfo.show"></valid-code>
+            <valid-code v-if="dialogInfo.show" v-model="validCode" />
           </div>
-          <el-form-item :label="item.key" :prop="item.value" :key="index" v-else>
-            <el-input :type="item.value === 'password' ? 'password' : ''" v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)"></el-input>
+          <el-form-item v-else :key="index" :label="item.key" :prop="item.value">
+            <el-input v-model.trim="form[item.value]" :type="item.value === 'password' ? 'password' : ''" :placeholder="getPlaceholder(item)" />
           </el-form-item>
         </template>
       </el-form>
@@ -40,26 +41,27 @@
         class="bt-confirm"
         type="primary"
         :loading="dialogInfo.btLoading"
-        @click="handleConfirm(dialogInfo.status)">{{dialogInfo.header[dialogInfo.status]}}
+        @click="handleConfirm(dialogInfo.status)"
+      >{{ dialogInfo.header[dialogInfo.status] }}
       </el-button>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import ValidCode from '@/components/ValidCode'
-import {_setCookie} from '@/common/js/storage'
-import {registeredApi, loginApi} from '@/api/user'
+import { _setCookie } from '@/common/js/storage'
+import { registeredApi, loginApi } from '@/api/user'
 export default {
-  name: 'user',
+  name: 'User',
   components: {
     ValidCode
   },
   data () {
     const checkPhoneOrEmail = (rule, value, callback) => {
-      let checkPhone = this.$validate({label: '手机号 或 Email', value, rules: ['notnull', 'moblie']}),
-        checkEmail = this.$validate({label: '手机号 或 Email', value, rules: ['notnull', 'email']})
+      const checkPhone = this.$validate({ label: '手机号 或 Email', value, rules: ['notnull', 'moblie'] })
+      const checkEmail = this.$validate({ label: '手机号 或 Email', value, rules: ['notnull', 'email'] })
 
       if (!value) {
         callback(new Error('请输入手机号 或 Email'))
@@ -79,7 +81,7 @@ export default {
       }
     }
     const checkPassword = (rule, value, callback) => {
-      let check = this.$validate({label: '密码', value, rules: ['notnull', 'password']})
+      const check = this.$validate({ label: '密码', value, rules: ['notnull', 'password'] })
       if (!check.result) {
         callback(new Error(check.message))
       } else {
@@ -99,14 +101,14 @@ export default {
       },
       fieldList: {
         login: [
-          {value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail},
-          {value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword}
+          { value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail },
+          { value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword }
         ],
         registered: [
-          {value: 'name', key: '你的名字', placeholder: '真实姓名或昵称', type: 'input', required: true},
-          {value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail},
-          {value: 'validCode', key: '验证码', type: 'input', required: true, rules: checkValidCode},
-          {value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword}
+          { value: 'name', key: '你的名字', placeholder: '真实姓名或昵称', type: 'input', required: true },
+          { value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail },
+          { value: 'validCode', key: '验证码', type: 'input', required: true, rules: checkValidCode },
+          { value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword }
         ]
       },
       dialogInfo: {
@@ -149,11 +151,11 @@ export default {
   methods: {
     // 初始化验证数据
     initRules () {
-      let obj = {}
+      const obj = {}
       // 循环字段列表
-      for (let key in this.fieldList) {
-        for (let child of this.fieldList[key]) {
-          let type = child.type === 'select' ? '选择' : '输入'
+      for (const key in this.fieldList) {
+        for (const child of this.fieldList[key]) {
+          const type = child.type === 'select' ? '选择' : '输入'
           if (child.required) {
             if (child.rules) {
               obj[child.value] = {
@@ -250,6 +252,10 @@ export default {
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
   .user-tool{
+    display: flex;
+    justify-content: flex-end;
+    width: 25%;
+    padding: 0 15px;
     .login{
       font-size: 13px;
       .bt-login, .bt-registered{
