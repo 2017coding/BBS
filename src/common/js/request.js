@@ -6,8 +6,8 @@ import globalFn from '@/common/js/utils'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
-  timeout: 100000 // request timeout
+  baseURL: process.env.VUE_APP_BASE_API, // api的base_url
+  timeout: 10000 // request timeout
 })
 
 // 请求拦截器
@@ -31,7 +31,6 @@ service.interceptors.request.use(config => {
       }
     }
   }
-
   // 全局去前后空格
   function dataTrim (data) {
     if (Array.isArray(data)) {
@@ -52,8 +51,7 @@ service.interceptors.request.use(config => {
       }
     }
   }
-
-  dataTrim(config)
+  dataTrim(config.data)
   return config
 }, error => {
   // Do something with request error
@@ -71,45 +69,34 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (response.status === 401 || res.status === 40101) {
-      Message({
-        showClose: true,
-        message: res.message,
-        type: 'error',
-        duration: 3 * 1000
-      })
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        MessageBox.alert('你已被登出，请重新登录', {
-          confirmButtonText: '重新登录',
-          type: 'info'
-        }).then(() => {
-          store.dispatch('loginOut').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
-          })
-        })
+    let tips = '用户信息错误'; let btMsg = '重新登录'
+    if (res.code === 20101 || res.code === 20201) {
+      switch (res.code) {
+        case 20101:
+          tips = '当前账号在其他地方登陆, 如不是本人操作，请及时修改密码'
+          btMsg = '确定'
+          break
+        case 20201:
+          tips = '用户信息错误, 请重新登录'
+          btMsg = '重新登录'
+          break
+      // case 20203:
+      //   tips = '用户未绑定角色，无法登陆'
+      //   btMsg = '确定'
+      //   break
       }
-      // return Promise.reject('error')
+      MessageBox.alert(tips, {
+        confirmButtonText: btMsg,
+        type: 'info'
+      }).then(() => {
+        store.dispatch('user/loginOut').then(() => {
+          location.reload() // 为了重新实例化vue-router对象 避免bug
+        })
+      }).catch(() => {
+      })
+      return Promise.reject('error')
     } else {
       const data = response.data
-      // 对全局的初始时间过滤
-      if (data.content && data.content.data) {
-        if (Array.isArray(data.content.data)) {
-          data.content.data.forEach(item => {
-            for (const key in item) {
-              if (item[key] === '1900-01-01T00:00:00') {
-                item[key] = ''
-              }
-            }
-          })
-        } else {
-          for (const key in data.content.data) {
-            if (data.content.data[key] === '1900-01-01T00:00:00') {
-              data.content.data[key] = ''
-            }
-          }
-        }
-      }
       return data
     }
   },
@@ -122,7 +109,7 @@ service.interceptors.response.use(
       type: 'error',
       duration: 3 * 1000
     })
-    // return Promise.reject(error)
+    return Promise.reject(error)
   }
 )
 

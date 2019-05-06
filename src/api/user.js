@@ -21,7 +21,7 @@ export function loginApi (data) {
 // 得到用户信息
 export function getUserInfoApi (params) {
   return request({
-    url: '/api/user/GetUserinfo',
+    url: '/api/user/userInfo',
     method: 'get',
     params
   })

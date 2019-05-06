@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <sidebar />
-    <page />
+    <Main />
     <div class="right">
       <p class="alert-warning">
         <!-- {{`回顾${new Date().getFullYear() - 1}， 你都收获了什么?`}} -->
@@ -19,13 +19,13 @@
 
 <script>
 import Sidebar from './components/Sidebar'
-import page from './components/Page'
+import Main from './components/Main'
 import Lecture from './components/Lecture'
 import Activity from './components/Activity'
 export default {
   components: {
     Sidebar,
-    page,
+    Main,
     Lecture,
     Activity
   },

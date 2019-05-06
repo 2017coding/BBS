@@ -10,63 +10,70 @@
       <div class="bt-created">创建<i class="el-icon-caret-bottom" /></div>
       <i class="el-icon-bell" />
       <i class="el-icon-message" />
+      <i class="avatar" :style="`background-image: url(${userInfo.avatar || 'https://www.lyh.red/file/%E9%A6%96%E9%A1%B5%E8%BD%AE%E6%92%AD_20190418155210_g6fk/20190418160520_a4e7.jpg'})`" />
       <!-- 用户面板 -->
-      <!-- <el-popover
-        v-model="visible"
-        placement="bottom"
-        title="标题"
-        width="200"
-        trigger="manual"
-        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-      >
-        <span slot="reference" class="avatar" :style="`background-image: url(${require('@/assets/image/home/b5.jpg')})`" />
-      </el-popover> -->
     </div>
     <!-- 登录注册弹窗 -->
-    <el-dialog :title="dialogInfo.header[dialogInfo.status]" :visible.sync="dialogInfo.show" width="560px" top="5vh">
-      <el-form ref="form" :model="form" :rules="rules" label-width="140px" style="width: 80%;">
-        <template v-for="(item, index) in fieldList[dialogInfo.status]">
-          <div v-if="item.value === 'validCode'" :key="index" class="valid-code">
-            <el-form-item :prop="item.value">
-              <el-input v-model.trim="form[item.value]" :placeholder="getPlaceholder(item)" />
-            </el-form-item>
-            <valid-code v-if="dialogInfo.show" v-model="validCode" />
+    <page-dialog
+      :title="dialogInfo.title[dialogInfo.type]"
+      :visible.sync="dialogInfo.visible"
+      :width="dialogInfo.width"
+      :bt-loading="dialogInfo.btLoading"
+      :bt-list="dialogInfo.btList"
+      :append-to-body="false"
+      @handleClick="handleClick"
+    >
+      <!-- form -->
+      <page-form
+        v-if="dialogInfo.type !== 'userTransfer'"
+        :ref-obj.sync="formInfo.ref"
+        :data="formInfo.data"
+        :field-list="formInfo.fieldList"
+        :rules="formInfo.rules"
+        :label-width="formInfo.labelWidth"
+      >
+        <!-- 自定义插槽-选择头像 -->
+        <template v-slot:form-validCode>
+          <div class="valid-code">
+            <el-input v-model.trim="formInfo.data.validCode" placeholder="请输入验证码" />
+            <valid-code
+              v-if="dialogInfo.visible"
+              v-model="validCode"
+              :refresh="refreshCode"
+            />
           </div>
-          <el-form-item v-else :key="index" :label="item.key" :prop="item.value">
-            <el-input v-model.trim="form[item.value]" :type="item.value === 'password' ? 'password' : ''" :placeholder="getPlaceholder(item)" />
-          </el-form-item>
         </template>
-      </el-form>
+      </page-form>
       <el-button
         class="bt-confirm"
         type="primary"
         :loading="dialogInfo.btLoading"
-        @click="handleConfirm(dialogInfo.status)"
-      >{{ dialogInfo.header[dialogInfo.status] }}
+        @click="handleConfirm(dialogInfo.type)"
+      >{{ dialogInfo.title[dialogInfo.type] }}
       </el-button>
-    </el-dialog>
+    </page-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import PageDialog from '@/components/PageDialog'
+import PageForm from '@/components/PageForm'
 import ValidCode from '@/components/ValidCode'
 import { _setCookie } from '@/common/js/storage'
 import { registeredApi, loginApi } from '@/api/user'
 export default {
   name: 'User',
   components: {
+    PageDialog,
+    PageForm,
     ValidCode
   },
   data () {
-    const checkPhoneOrEmail = (rule, value, callback) => {
-      const checkPhone = this.$validate({ label: '手机号 或 Email', value, rules: ['notnull', 'moblie'] })
-      const checkEmail = this.$validate({ label: '手机号 或 Email', value, rules: ['notnull', 'email'] })
-
-      if (!value) {
-        callback(new Error('请输入手机号 或 Email'))
-      } else if (!(checkPhone.result || checkEmail.result)) {
-        callback(new Error('格式必须为手机号 或 Email'))
+    const checkAccount = (rule, value, callback) => {
+      const check = this.$validate({ label: '账号', value, rules: ['notnull', 'noChinese', 'length'], conditions: [2, 16] })
+      if (!check.result) {
+        callback(new Error(check.message))
       } else {
         callback()
       }
@@ -75,13 +82,14 @@ export default {
       if (!value) {
         callback(new Error('请输入验证码'))
       } else if (value.toUpperCase() !== this.validCode.toUpperCase()) {
+        this.refreshCode = Math.random()
         callback(new Error('验证码不正确'))
       } else {
         callback()
       }
     }
     const checkPassword = (rule, value, callback) => {
-      const check = this.$validate({ label: '密码', value, rules: ['notnull', 'password'] })
+      const check = this.$validate({ label: '密码', value, rules: ['notnull', 'string', 'length'], conditions: [6, 16] })
       if (!check.result) {
         callback(new Error(check.message))
       } else {
@@ -89,35 +97,38 @@ export default {
       }
     }
     return {
-      // 表单参数
+      visible: false,
+      // 验证码
       validCode: '',
-      form: {
-        name: '',
-        account: '',
-        validCode: '',
-        password: ''
-      },
-      rules: {
-      },
-      fieldList: {
-        login: [
-          { value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail },
-          { value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword }
+      // 刷新验证码
+      refreshCode: 0,
+      // 表单相关
+      formInfo: {
+        ref: null,
+        data: {
+          name: '',
+          account: '',
+          validCode: '',
+          password: '',
+          type: 1 // 论坛端登陆
+        },
+        fieldList: [
+          { label: '你的名字', value: 'name', placeholder: '真实姓名或昵称', type: 'input', required: true, show: true },
+          { label: '手机号 或 Email', value: 'account', type: 'input', required: true, validator: checkAccount, show: true },
+          { label: '', value: 'validCode', type: 'slot', required: true, validator: checkValidCode, show: true },
+          { label: '密码', value: 'password', type: 'password', required: true, validator: checkPassword, show: true }
         ],
-        registered: [
-          { value: 'name', key: '你的名字', placeholder: '真实姓名或昵称', type: 'input', required: true },
-          { value: 'account', key: '手机号 或 Email', type: 'input', required: true, rules: checkPhoneOrEmail },
-          { value: 'validCode', key: '验证码', type: 'input', required: true, rules: checkValidCode },
-          { value: 'password', key: '密码', type: 'input', required: true, rules: checkPassword }
-        ]
+        rules: {},
+        labelWidth: '140px'
       },
+      // 弹窗相关
       dialogInfo: {
-        header: {
-          login: '登录',
+        title: {
+          login: '登陆',
           registered: '注册'
         },
-        show: false,
-        status: '',
+        visible: false,
+        type: '',
         btLoading: false
       }
     }
@@ -131,78 +142,64 @@ export default {
     'validCode' (val) {
       console.log(val)
     },
-    'dialogInfo.show' () {
-      // 弹窗隐藏时，将弹窗数据初始化
-      if (!this.dialogInfo.show) {
-        // 表单验证初始哈
-        if (this.$refs.form) {
-          this.$refs.form.resetFields()
+    'dialogInfo.visible' (val) {
+      const formInfo = this.formInfo
+      if (!val) {
+        // 表单验证初始化
+        if (formInfo.ref) {
+          formInfo.ref.resetFields()
         }
-        // 表单内容初始化
         this.resetForm()
-        // 按钮loading消失
+        // 重置弹窗按钮loading
         this.dialogInfo.btLoading = false
+      }
+    },
+    'dialogInfo.type' (val) {
+      const formInfo = this.formInfo
+      switch (val) {
+        case 'login':
+          for (const item of formInfo.fieldList) {
+            if (['name', 'validCode'].includes(item.value)) {
+              item.show = false
+            }
+          }
+          break
+        case 'registered':
+          for (const item of formInfo.fieldList) {
+            if (['name', 'validCode'].includes(item.value)) {
+              item.show = true
+            }
+          }
+          break
       }
     }
   },
   mounted () {
+    console.log(this.userInfo)
     this.initRules()
   },
   methods: {
-    // 初始化验证数据
+    // 初始化验证
     initRules () {
-      const obj = {}
-      // 循环字段列表
-      for (const key in this.fieldList) {
-        for (const child of this.fieldList[key]) {
-          const type = child.type === 'select' ? '选择' : '输入'
-          if (child.required) {
-            if (child.rules) {
-              obj[child.value] = {
-                required: child.required,
-                validator: child.rules,
-                trigger: ['blur', 'change']
-              }
-            } else {
-              obj[child.value] = {
-                required: child.required,
-                message: '请' + type + child.key,
-                trigger: ['blur', 'change']
-              }
-            }
-          }
-        }
-      }
-      this.rules = obj
-    },
-    // 得到placeholder的显示
-    getPlaceholder (data) {
-      let placeholder
-      if (data.placeholder) {
-        return data.placeholder
-      }
-      if (data.type === 'input' || data.type === 'textarea') {
-        placeholder = '请输入' + data.key
-      } else if (data.type === 'select' || data.type === 'date') {
-        placeholder = '请选择' + data.key
-      } else {
-        placeholder = data.key
-      }
-      return placeholder
+      const formInfo = this.formInfo
+      formInfo.rules = this.$initRules(formInfo.fieldList)
     },
     // 按钮点击
     handleClick (type, data) {
+      const dialogInfo = this.dialogInfo
       switch (type) {
         case 'login':
         case 'registered':
-          this.dialogInfo.show = true
-          this.dialogInfo.status = type
+          dialogInfo.visible = true
+          dialogInfo.type = type
           break
       }
     },
     // 按钮提交
     handleConfirm (type, data) {
-      this.$refs.form.validate(valid => {
+      const formInfo = this.formInfo
+      const dialogInfo = this.dialogInfo
+      formInfo.ref.validate(valid => {
         if (valid) {
           let api
           if (type === 'login') {
@@ -212,16 +209,20 @@ export default {
           } else {
             return
           }
-          this.dialogInfo.btLoading = true
-          api(this.form)
+          dialogInfo.btLoading = true
+          const params = JSON.parse(JSON.stringify(formInfo.data))
+          delete params.validCode
+          api(params)
             .then(res => {
               if (res.success) {
                 if (type === 'login') {
                   _setCookie('token', res.token)
+                  // 设置cookie
+                  this.$store.dispatch('user/setToken', res.token)
+                  // 设置
                   this.$store.dispatch('user/setUserInfo', res.content.data)
-                } else {
-                  this.dialogInfo.show = true
                 }
+                dialogInfo.visible = false
               }
               this.$message({
                 showClose: true,
@@ -229,20 +230,22 @@ export default {
                 type: res.success ? 'success' : 'error',
                 duration: 3500
               })
-              this.dialogInfo.btLoading = false
+              dialogInfo.btLoading = false
             })
             .catch(() => {
-              this.dialogInfo.btLoading = false
+              dialogInfo.btLoading = false
             })
         }
       })
     },
     // 表单初始化
     resetForm () {
-      this.form = {
+      this.formInfo.data = {
         name: '',
         account: '',
-        password: ''
+        validCode: '',
+        password: '',
+        type: 1 // 论坛端登陆
       }
     }
   }
@@ -285,7 +288,8 @@ export default {
     }
     .valid-code{
       display: flex;
-      .el-form-item{
+      .el-input{
+        margin-right: 10px;
         flex: 1;
       }
     }
@@ -337,11 +341,19 @@ export default {
   }
 </style>
 <style lang="scss">
-  .user-tool{
-    .el-dialog__header{
-      background: #f3f3f3;
-      overflow: hidden;
-      border-radius: 6px 6px 0 0;
-    }
+.user-tool{
+  .el-dialog{
+    top: 5vh;
+    width: 560px;
   }
+  .el-dialog__header{
+    background: #f3f3f3;
+    overflow: hidden;
+    border-radius: 6px 6px 0 0;
+  }
+  .page-form{
+    width: 80%;
+  }
+}
 </style>
+
