@@ -82,7 +82,7 @@ export default {
     font-weight: bold!important;
   }
   .menu{
-    flex: 1;
+    padding-right: 35px;
     .menu-title{
       padding: 10px 20px;
       cursor: pointer;

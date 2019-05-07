@@ -5,7 +5,12 @@
         <span class="LLL">LLL</span>
         <span class="yh">yh</span>
       </p>
-      <navbar-item />
+      <div class="mid">
+        <transition name="el-fade-in-linear">
+          <navbar-item v-if="!searchFocus" />
+        </transition>
+        <search />
+      </div>
       <user-tool />
     </div>
   </div>
@@ -13,17 +18,30 @@
 
 <script>
 import NavbarItem from './NavbarItem'
+import Search from './Search'
 import UserTool from './UserTool'
 export default {
   name: 'Navbar',
   components: {
     NavbarItem,
+    Search,
     UserTool
   },
   data () {
-    return {}
+    return {
+      searchFocus: false
+    }
+  },
+  mounted () {
+    this.receiveEventBus()
   },
   methods: {
+    receiveEventBus () {
+      // 接收eventBus
+      this.$eventBus.$on('search-focus', val => {
+        this.searchFocus = val
+      })
+    }
   }
 }
 </script>
@@ -57,6 +75,10 @@ export default {
         .yh{
           color: $theme;
         }
+      }
+      .mid{
+        display: flex;
+        flex: 1;
       }
     }
     .tags{

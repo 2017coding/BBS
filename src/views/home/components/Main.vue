@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="carousel">
-      <el-carousel height="150px">
+      <el-carousel v-loading="carouselLoading" height="150px">
         <el-carousel-item v-for="(item, index) in carouselList" :key="index">
           <!-- <span>{{item.title}}</span> -->
           <img :src="item.image" style="width: 100%" @click="handClick('carousel', item)">
@@ -26,6 +26,7 @@ export default {
   },
   data () {
     return {
+      carouselLoading: true,
       carouselList: []
     }
   },
@@ -35,6 +36,7 @@ export default {
   methods: {
     getCarouselList () {
       getCarouselApi().then(res => {
+        this.carouselLoading = false
         if (res.success) {
           this.carouselList = res.content
         } else {
@@ -45,6 +47,8 @@ export default {
             duration: 3500
           })
         }
+      }).catch(() => {
+        this.carouselLoading = false
       })
     },
     handClick (type, data) {
