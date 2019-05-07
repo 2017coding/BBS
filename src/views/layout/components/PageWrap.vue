@@ -19,8 +19,9 @@ export default {
   .page-wrap{
     position: relative;
     max-width: $maxWidth;
-    min-height: calc(100% - 60px - 75px);
+    min-width: $minWidth;
+    min-height: calc(100% - 64px - 54px);
     margin: auto;
-    margin-top: 30px;
+    padding-top: 30px;
   }
 </style>

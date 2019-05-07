@@ -1,20 +1,37 @@
 <template>
-  <div class="B02">
-    <el-button
-      class="create"
-      type="primary"
-      icon="el-icon-plus"
-      size="medium"
-    >提问题</el-button>
-    <tabs :tab-list="tabList" />
+  <div class="page-questions">
+    <div class="main">
+      <el-button
+        class="create"
+        type="primary"
+        icon="el-icon-plus"
+        size="medium"
+      >提问题</el-button>
+      <tabs :tab-list="tabList" />
+    </div>
+    <div class="right">
+      <Notices />
+      <Advertising />
+      <lives />
+      <activity />
+    </div>
   </div>
 </template>
 
 <script>
 import Tabs from './components/Tabs'
+import Notices from './components/Notices'
+import Advertising from './components/Advertising'
+import Lives from './components/Lives'
+import Activity from './components/Activity'
+
 export default {
   components: {
-    Tabs
+    Tabs,
+    Notices,
+    Advertising,
+    Lives,
+    Activity
   },
   data () {
     return {
@@ -31,11 +48,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.B02{
-  .create{
-    position: absolute;
-    right: 20px;
-    padding: 8px 8px;
+.page-questions{
+  display: flex;
+  padding-left: 10px;
+  .main{
+    position: relative;
+    width: 75%;
+    .create{
+      position: absolute;
+      right: 0px;
+      padding: 8px 8px;
+    }
+  }
+  .right{
+    padding: 0 15px;
+    width: 25%;
   }
 }
 </style>

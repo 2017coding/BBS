@@ -1,17 +1,11 @@
 <template>
-  <div class="home">
+  <div class="page-home">
     <sidebar />
     <Main />
     <div class="right">
-      <p class="alert-warning">
-        <!-- {{`回顾${new Date().getFullYear() - 1}， 你都收获了什么?`}} -->
-        免费讲座：如何成为一名合格的工程师？
-      </p>
-      <div class="advertising">
-        <img :src="require('@/assets/image/home/c1.png')" class="advertising-image">
-        <p class="desc">想在上方展示你的广告吗</p>
-      </div>
-      <lecture />
+      <Notices />
+      <Advertising />
+      <lives />
       <activity />
     </div>
   </div>
@@ -20,13 +14,17 @@
 <script>
 import Sidebar from './components/Sidebar'
 import Main from './components/Main'
-import Lecture from './components/Lecture'
+import Notices from './components/Notices'
+import Advertising from './components/Advertising'
+import Lives from './components/Lives'
 import Activity from './components/Activity'
 export default {
   components: {
     Sidebar,
     Main,
-    Lecture,
+    Notices,
+    Advertising,
+    Lives,
     Activity
   },
   data () {
@@ -38,39 +36,11 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
-  .home{
+  .page-home{
     display: flex;
     .right{
       padding: 0 15px;
       width: 25%;
-      .alert-warning{
-        cursor: pointer;
-        padding: 15px;
-        margin-bottom: 20px;
-        font-size: 12px;
-        border: 1px solid #faebcc;
-        background-color: #fcf8e3;
-        border-radius: 4px;
-        &:hover{
-          text-decoration: underline;
-        }
-      }
-      .advertising{
-        margin-bottom: 25px;
-        .advertising-image{
-          width: 100%;
-        }
-        .desc{
-          cursor: pointer;
-          padding: 4px;
-          text-align: center;
-          font-size: $fontSize4;
-          color: $fontColor3;
-          &:hover{
-            text-decoration: underline;
-          }
-        }
-      }
     }
   }
 </style>

@@ -30,8 +30,8 @@ export function getUserInfoApi (params) {
 // 退出登录
 export function loginOutApi (params) {
   return request({
-    url: '/api/user/WriteLog',
-    method: 'get',
+    url: '/api/user/loginOut',
+    method: 'post',
     params
   })
 }

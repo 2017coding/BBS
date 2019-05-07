@@ -8,21 +8,21 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <page-head-config />
-    <page-blog-list />
+    <article-config />
+    <article-list />
   </div>
 </template>
 
 <script>
-import PageHeadConfig from './PageHeadConfig'
-import PageBlogList from './PageBlogList'
+import ArticleConfig from './ArticleConfig'
+import ArticleList from './ArticleList'
 import { getCarouselApi } from '@/api/home'
 
 export default {
   name: 'Main',
   components: {
-    PageHeadConfig,
-    PageBlogList
+    ArticleConfig,
+    ArticleList
   },
   data () {
     return {

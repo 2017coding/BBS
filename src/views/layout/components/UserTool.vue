@@ -10,8 +10,20 @@
       <div class="bt-created">创建<i class="el-icon-caret-bottom" /></div>
       <i class="el-icon-bell" />
       <i class="el-icon-message" />
-      <i class="avatar" :style="`background-image: url(${userInfo.avatar || 'https://www.lyh.red/file/%E9%A6%96%E9%A1%B5%E8%BD%AE%E6%92%AD_20190418155210_g6fk/20190418160520_a4e7.jpg'})`" />
       <!-- 用户面板 -->
+      <div class="panel" @mouseover="showUserPanel('over')" @mouseout="showUserPanel('out')">
+        <i class="avatar" :style="`background-image: url(${userInfo.avatar || 'https://www.lyh.red/file/%E9%A6%96%E9%A1%B5%E8%BD%AE%E6%92%AD_20190418155210_g6fk/20190418160520_a4e7.jpg'})`" />
+        <div v-if="userPanelVisible" class="container">
+          <div class="">声望</div>
+          <ul class="menu">
+            <li v-for="(item, index) in userMenu" :key="index" class="item">
+              <router-link v-if="item.event === 'href'" :to="item.url">{{ item.name }}</router-link>
+              <a v-else @click="handleClick(item.event)">{{ item.name }}</a>
+            </li>
+          </ul>
+          <div class="">用户申诉</div>
+        </div>
+      </div>
     </div>
     <!-- 登录注册弹窗 -->
     <page-dialog
@@ -102,6 +114,21 @@ export default {
       validCode: '',
       // 刷新验证码
       refreshCode: 0,
+      userPanelVisible: false,
+      timer: '',
+      // 用户菜单
+      userMenu: [
+        { name: '我的笔记', url: '', event: 'href' },
+        { name: '我的主页', url: '', event: 'href' },
+        { name: '我的收藏', url: '', event: 'href' },
+        { name: '我的档案', url: '', event: 'href' },
+        { name: '受邀回答', url: '', event: 'href' },
+        { name: '我的资产', url: '', event: 'href' },
+        { name: '付费问答', url: '', event: 'href' },
+        { name: '个人设置', url: '', event: 'href' },
+        { name: '众审中心', url: '', event: 'href' },
+        { name: '退出', url: '', event: 'loginOut' }
+      ],
       // 表单相关
       formInfo: {
         ref: null,
@@ -140,7 +167,7 @@ export default {
   },
   watch: {
     'validCode' (val) {
-      console.log(val)
+      // console.log(val)
     },
     'dialogInfo.visible' (val) {
       const formInfo = this.formInfo
@@ -175,7 +202,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.userInfo)
     this.initRules()
   },
   methods: {
@@ -183,6 +209,16 @@ export default {
     initRules () {
       const formInfo = this.formInfo
       formInfo.rules = this.$initRules(formInfo.fieldList)
+    },
+    showUserPanel (type) {
+      if (type === 'over') {
+        this.userPanelVisible = true
+        clearTimeout(this.timer)
+      } else if (type === 'out') {
+        this.timer = setTimeout(() => {
+          // this.userPanelVisible = false
+        }, 2000)
+      }
     },
     // 按钮点击
     handleClick (type, data) {
@@ -192,6 +228,9 @@ export default {
         case 'registered':
           dialogInfo.visible = true
           dialogInfo.type = type
+          break
+        case 'loginOut':
+          this.$store.dispatch('user/loginOut')
           break
       }
     },
@@ -327,15 +366,46 @@ export default {
           color: $theme;
         }
       }
-      .avatar{
-        margin-left: 10px;
-        cursor: pointer;
-        display: inline-block;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        background-size: cover;
-        background-position: center;
+      .panel{
+        position: relative;
+        .avatar{
+          margin-left: 10px;
+          cursor: pointer;
+          display: inline-block;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+        }
+        .container{
+          position: absolute;
+          margin: 2px;
+          top: 100%;
+          right: 0;
+          width: 240px;
+          background: white;
+          border: 1px solid rgba(0,0,0,0.15);
+          box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+          border-radius: 3px;
+          z-index: 99;
+          .menu{
+            .item{
+              display: inline-block;
+              width: 50%;
+              line-height: 1.4;
+              padding: 3px 20px;
+              cursor: pointer;
+              &:hover{
+                background: #f5f5f5;
+              }
+              a{
+                font-size: 14px;
+                color: rgb(100, 100, 100);
+              }
+            }
+          }
+        }
       }
     }
   }

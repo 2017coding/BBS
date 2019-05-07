@@ -19,8 +19,11 @@ export default {
   @import '@/common/style/mixin.scss';
   .footer{
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 54px;
     padding: 20px;
-    text-align: right;
     span{
       background: linear-gradient(to right, #81FFEF, #F067B4);
       -webkit-background-clip: text;

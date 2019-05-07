@@ -33,13 +33,14 @@ export default {
   .LLLyh-header{
     border-top: 3px solid $theme;
     box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
-    height: 64px;
+    height: $headHeight;
     .navbar{
       margin: auto;
       display: flex;
       // justify-content: center;
       align-items: center;
       max-width: $maxWidth;
+      min-width: $minWidth;
       height: 100%;
       font-size: 16px;
       .logo{

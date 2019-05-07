@@ -8,3 +8,12 @@ export function getCarouselApi (params) {
     params
   })
 }
+
+// 得到文章列表
+export function getArticleListApi (params) {
+  return request({
+    url: 'api/Article/getList',
+    method: 'get',
+    params
+  })
+}

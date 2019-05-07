@@ -9,8 +9,9 @@ $fontSize2: 18px; // 标题字体大小
 $fontSize3: 13px; // 内容字体大小 
 $fontSize4: 12px; // 小字体 
 
+$headHeight: 64px;
 $maxWidth: 1140px;
-$minWidth: 1140px;
+$minWidth: 980px;
 
 :export {
   theme: $theme;

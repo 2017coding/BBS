@@ -1,37 +1,41 @@
 <template>
-  <ul class="page-blog-list">
-    <li v-for="(item, index) in listInfo.data" :key="index" class="blog-item">
-      <div class="from" />
-      <div class="article">
-        <div class="content">
-          <p class="title">{{ item.title }}</p>
-          <p class="body">{{ item.content }}</p>
+  <ul class="page-article-list">
+    <template v-if="listInfo.data.length > 0">
+      <li v-for="(item, index) in listInfo.data" :key="index" class="article-item">
+        <div class="from" />
+        <div class="article">
+          <div class="content">
+            <p class="title">{{ item.title }}</p>
+            <p class="body">{{ item.content }}</p>
+          </div>
+          <div class="img" :style="`background-image: url(${require('@/assets/image/home/b1.png')})`" />
         </div>
-        <div class="img" :style="`background-image: url(${require('@/assets/image/home/b1.png')})`" />
-      </div>
-      <div class="info">
-        <div class="praise">
-          <span class="wrap"><i class="el-icon-good" /></span>
-          <span v-if="item.praiseNums > 0">
-            <span class="unit">x</span>
-            <span class="praisenums">{{ item.praiseNums }}</span>
-          </span>
-          <span class="dot">·</span>
-          <span class="votes-word">赞</span>
+        <div class="info">
+          <div class="praise">
+            <span class="wrap"><i class="el-icon-good" /></span>
+            <span v-if="item.praiseNums > 0">
+              <span class="unit">x</span>
+              <span class="praisenums">{{ item.praiseNums }}</span>
+            </span>
+            <span class="dot">·</span>
+            <span class="votes-word">赞</span>
+          </div>
+          <div class="author">{{ item.author }}</div>
+          <span class="dot" style="padding: 0 5px">·</span>
+          <div class="release-time">{{ item.releaseTime }}</div>
         </div>
-        <div class="author">{{ item.author }}</div>
-        <span class="dot" style="padding: 0 5px">·</span>
-        <div class="release-time">{{ item.releaseTime }}</div>
-      </div>
-    </li>
+      </li>
+    </template>
+    <p v-else class="no-data">
+      暂无数据
+    </p>
   </ul>
 </template>
 
 <script>
-// import { getListApi } from '@/api/home/list'
-import List from './list'
+import { getArticleListApi } from '@/api/home'
 export default {
-  name: 'PageBlogList',
+  name: 'ArticleList',
   props: {
     bolgData: {
       type: Object
@@ -40,19 +44,31 @@ export default {
   data () {
     return {
       listInfo: {
-        data: []
+        data: [],
+        query: {
+          curPage: 1,
+          pageSize: 20
+        }
       }
     }
   },
   created () {
-    this._getList()
+    this.getList()
   },
   methods: {
-    _getList () {
-      let index = 0
-      this.listInfo.data = List.data.filter(item => {
-        index++
-        return index < 10
+    getList () {
+      const listInfo = this.listInfo
+      getArticleListApi(listInfo.query).then(res => {
+        if (res.success) {
+          listInfo.data = res.content.result
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.message,
+            type: res.success ? 'success' : 'error',
+            duration: 3500
+          })
+        }
       })
     }
   }
@@ -61,9 +77,9 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
-  .page-blog-list{
+  .page-article-list{
     font-size: $fontSize3;
-    .blog-item{
+    .article-item{
       margin: 20px 0;
       .article{
         cursor: pointer;
@@ -146,6 +162,12 @@ export default {
           color: $theme;
         }
       }
+    }
+    .no-data{
+      height: 100%;
+      font-size: 36px;
+      padding: 40px;
+      text-align: center;
     }
   }
 </style>
