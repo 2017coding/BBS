@@ -39,7 +39,7 @@ export default {
         { id: 1, name: '最新回答', icon: '' },
         { id: 2, name: '等待回答', icon: '' },
         { id: 3, name: '热门回答', icon: '' },
-        { id: 4, name: '付费回答', icon: '' },
+        // { id: 4, name: '付费回答', icon: '' },
         { id: 5, name: '众审中心', icon: '' }
       ]
     }
@@ -50,9 +50,9 @@ export default {
 <style lang="scss" scoped>
 .page-questions{
   display: flex;
-  padding-left: 10px;
   .main{
     position: relative;
+    padding-left: 10px;
     width: 75%;
     .create{
       position: absolute;

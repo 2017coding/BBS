@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <input v-model="val" class="search-input" placeholder="搜索问题或关键字">
-    <i class="el-icon-search" />
+    <i class="el-icon-search" @click="handleEvent('search')" />
   </div>
 </template>
 
@@ -12,14 +12,35 @@ export default {
       val: ''
     }
   },
+  watch: {
+    $route (val) {
+      // 切换的路由不为搜索，将值清空
+      if (val.path !== '/search') {
+        this.val = ''
+      }
+    }
+  },
   mounted () {
     document.body.addEventListener('click', e => {
-      if (e.target.className === 'search-input') {
+      // 'el-icon-search'
+      if (['search-input'].includes(e.target.className)) {
         this.$eventBus.$emit('search-focus', true)
       } else {
         this.$eventBus.$emit('search-focus', false)
       }
     }, false)
+  },
+  methods: {
+    handleEvent (event, data) {
+      switch (event) {
+        case 'search':
+          this.$router.push({
+            path: '/search',
+            query: { keyword: this.val }
+          })
+          break
+      }
+    }
   }
 }
 </script>
@@ -58,6 +79,7 @@ export default {
       right: 2px;
       padding: 10px;
       transform: translate(0, -50%);
+      cursor: pointer;
     }
   }
 </style>

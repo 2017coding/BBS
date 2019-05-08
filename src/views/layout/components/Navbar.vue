@@ -1,7 +1,7 @@
 <template>
   <div class="LLLyh-header">
     <div class="navbar">
-      <p class="logo">
+      <p class="logo" @click="$router.push('/')">
         <span class="LLL">LLL</span>
         <span class="yh">yh</span>
       </p>
@@ -52,6 +52,7 @@ export default {
     border-top: 3px solid $theme;
     box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
     height: $headHeight;
+    background: #fafafa;
     .navbar{
       margin: auto;
       display: flex;

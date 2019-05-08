@@ -7,21 +7,31 @@
     </div>
     <!-- 登录后显示 -->
     <div v-else class="user">
-      <div class="bt-created">创建<i class="el-icon-caret-bottom" /></div>
-      <i class="el-icon-bell" />
-      <i class="el-icon-message" />
+      <a class="bt-created">
+        创建<i class="el-icon-caret-bottom" />
+      </a>
+      <router-link to="">
+        <i class="el-icon-bell" />
+      </router-link>
+      <router-link to="">
+        <i class="el-icon-message" />
+      </router-link>
       <!-- 用户面板 -->
       <div class="panel" @mouseover="showUserPanel('over')" @mouseout="showUserPanel('out')">
         <i class="avatar" :style="`background-image: url(${userInfo.avatar || 'https://www.lyh.red/file/%E9%A6%96%E9%A1%B5%E8%BD%AE%E6%92%AD_20190418155210_g6fk/20190418160520_a4e7.jpg'})`" />
         <div v-if="userPanelVisible" class="container">
-          <div class="">声望</div>
+          <div class="score">声望 999</div>
           <ul class="menu">
             <li v-for="(item, index) in userMenu" :key="index" class="item">
               <router-link v-if="item.event === 'href'" :to="item.url">{{ item.name }}</router-link>
               <a v-else @click="handleClick(item.event)">{{ item.name }}</a>
             </li>
           </ul>
-          <div class="">用户申诉</div>
+          <div class="foot">
+            <router-link to="">用户申诉</router-link> ·
+            <router-link to="">建议反馈</router-link> ·
+            <router-link to="">邀请朋友</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -216,8 +226,8 @@ export default {
         clearTimeout(this.timer)
       } else if (type === 'out') {
         this.timer = setTimeout(() => {
-          // this.userPanelVisible = false
-        }, 2000)
+          this.userPanelVisible = false
+        }, 500)
       }
     },
     // 按钮点击
@@ -293,6 +303,7 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
+  @import '@/common/style/mixin.scss';
   .user-tool{
     display: flex;
     justify-content: flex-end;
@@ -353,9 +364,12 @@ export default {
         border-radius: 3px;
         box-shadow: 0 1px 1px rgba(0,0,0,0.05);
         transition: all .2s linear;
-        &:hover{
+        &:hover, &:focus{
           background: #e6e6e6;
           border-radius: #adadad;
+        }
+        &:active{
+          outline: 0;
         }
       }
       .el-icon-bell, .el-icon-message{
@@ -389,7 +403,25 @@ export default {
           box-shadow: 0 6px 12px rgba(0,0,0,0.175);
           border-radius: 3px;
           z-index: 99;
+          .score, .foot{
+            padding: 0 10px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+          }
+          .foot{
+            font-size: 12px;
+            // text-align: center;
+          }
           .menu{
+            position: relative;
+            padding: 10px 0;
+            &::before{
+              @include border-1px('top');
+            }
+            &::after{
+              @include border-1px('bottom');
+            }
             .item{
               display: inline-block;
               width: 50%;

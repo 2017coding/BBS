@@ -99,10 +99,27 @@ export const routes = [
     ]
   },
   {
-    path: '/write',
-    component: () => import('@/views/create/write/index'),
+    path: '/write/:type',
+    alias: '/write',
+    component: () => import('@/views/write/index'),
     name: '写文章' + +new Date(),
     meta: { title: '写文章' }
+  },
+  {
+    path: '/search',
+    redirect: '/search/child',
+    component: Layout,
+    name: '搜索',
+    meta: { title: '搜索' },
+    children: [
+      {
+        path: 'child',
+        alias: '/search',
+        component: () => import('@/views/search/index'),
+        name: '搜索' + +new Date(),
+        meta: { title: '搜索' }
+      }
+    ]
   }
 ]
 
