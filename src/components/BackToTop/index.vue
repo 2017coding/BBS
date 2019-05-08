@@ -18,7 +18,7 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', () => {
-      this.show = this.getScrollTop() > 100
+      this.show = this.getScrollTop() > 500
     })
   },
   methods: {
