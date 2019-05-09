@@ -7,9 +7,21 @@
     </div>
     <!-- 登录后显示 -->
     <div v-else class="user">
-      <a class="bt-created">
-        创建<i class="el-icon-caret-bottom" />
-      </a>
+      <el-popover
+        popper-class="user-tool-popover"
+        placement="bottom-start"
+        width="120"
+        trigger="click"
+      >
+        <ul class="create-type-list">
+          <li v-for="(item, index) in createTypeList.filter(item => item.show)" :key="index" class="item">
+            <router-link :to="item.path">{{ item.label }}</router-link>
+          </li>
+        </ul>
+        <a slot="reference" class="bt-created">
+          创建<i class="el-icon-caret-bottom" />
+        </a>
+      </el-popover>
       <router-link to="">
         <i class="el-icon-bell" />
       </router-link>
@@ -126,6 +138,14 @@ export default {
       refreshCode: 0,
       userPanelVisible: false,
       timer: '',
+      // 创建类型
+      createTypeList: [
+        { label: '提问题', show: true, path: '/write?type=ask' },
+        { label: '发头条', show: false, path: '/write?type=submit' },
+        { label: '写文章', show: true, path: '/write?type=write' },
+        { label: '记笔记', show: false, path: '/write?type=record' },
+        { label: '草稿箱', show: false, path: '/write?type=draft' }
+      ],
       // 用户菜单
       userMenu: [
         { name: '我的笔记', url: '', event: 'href' },
@@ -416,6 +436,7 @@ export default {
           .menu{
             position: relative;
             padding: 10px 0;
+            z-index: 99999;
             &::before{
               @include border-1px('top');
             }
@@ -455,6 +476,21 @@ export default {
   }
   .page-form{
     width: 80%;
+  }
+}
+.user-tool-popover{
+  min-width: 120px!important;
+  padding: 0!important;
+  .create-type-list{
+    padding: 5px 0;
+    width: 100%;
+    .item{
+      padding: 5px;
+      text-indent: 5px;
+      &:hover{
+        background: #e6e6e6;
+      }
+    }
   }
 }
 </style>

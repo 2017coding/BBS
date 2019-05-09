@@ -56,9 +56,9 @@ export default {
 <style lang="scss" scoped>
   @import '@/common/style/base.scss';
   $maxWidth: 1480px;
+  $minWidth: 720px;
   .write-header{
     position: relative;
-    padding: 0 15px;
     background: #fafafa;
     border-top: 3px solid $theme;
     box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1), 0 1px rgba(0,0,0,0.1);
@@ -69,6 +69,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0 15px;
       max-width: $maxWidth;
       min-width: $minWidth;
       height: 100%;

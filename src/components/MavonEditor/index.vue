@@ -31,11 +31,7 @@ export default {
   data () {
     return {
       flag: 'inner', // 内 inner  外outside
-      editorValue: '',
-      errPlaceholder: `1. 描述你的问题
-                    2. 贴上相关代码 (请勿用图片代替代码)
-                    3. 贴上报错信息
-                    4 已经尝试过哪些方法仍然没解决 (附上相关链接)`
+      editorValue: ''
     }
   },
   watch: {

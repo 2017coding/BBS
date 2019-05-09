@@ -2,7 +2,7 @@
   <div class="write">
     <Navbar />
     <div class="main">
-      <components :is="getComponents(1)" />
+      <components :is="getComponents()" />
     </div>
   </div>
 </template>
@@ -25,9 +25,11 @@ export default {
   mounted () {
   },
   methods: {
-    getComponents (type) {
-      switch (type) {
-        case 1:
+    getComponents () {
+      switch (this.$route.query.type) {
+        case 'ask':
+          return 'Question'
+        case 'write':
           return 'Article'
       }
     }
@@ -43,6 +45,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
+    background: $bgColor;
     .main{
       flex: 1;
       width: 100%;
@@ -50,7 +53,6 @@ export default {
       padding: 15px;
       max-width: $maxWidth;
       min-width: $minWidth;
-      background: $bgColor;
     }
   }
 </style>

@@ -8,9 +8,19 @@
         </el-select>
       </el-input>
     </div>
-    <!-- 专栏和标签 -->
+    <!-- 相关设置 -->
+    <div class="config">
+      <el-select v-model="query.column" size="small" placeholder="发布专栏(选填)" style="margin-right: 10px;" clearable>
+        <el-option
+          v-for="item in columnList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
     <!-- 内容 -->
-    <mavon-editor class="mavon-editor" :value="query.content" :max-height="'100%'" />
+    <mavon-editor class="mavon-editor" :value.sync="query.content" :max-height="'100%'" />
   </div>
 </template>
 
@@ -22,9 +32,11 @@ export default {
   },
   data () {
     return {
+      columnList: [],
       query: {
         type: '1',
         title: '',
+        column: '',
         content: ''
       }
     }
@@ -38,7 +50,11 @@ export default {
     flex-direction: column;
     height: 100%;
     .title{
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+    }
+    .config{
+      display: flex;
+      margin-bottom: 15px;
     }
     .mavon-editor{
       flex: 1;

@@ -99,13 +99,6 @@ export const routes = [
     ]
   },
   {
-    path: '/write/:type',
-    alias: '/write',
-    component: () => import('@/views/write/index'),
-    name: '写文章' + +new Date(),
-    meta: { title: '写文章' }
-  },
-  {
     path: '/search',
     redirect: '/search/child',
     component: Layout,
@@ -120,6 +113,26 @@ export const routes = [
         meta: { title: '搜索' }
       }
     ]
+  },
+  {
+    path: '/write',
+    component: () => import('@/views/write/index'),
+    name: '写文章' + +new Date(),
+    meta: { title: '写文章' }
+  },
+  {
+    path: '/401',
+    name: '401',
+    hidden: true,
+    meta: { title: '401', icon: '' },
+    component: () => import('@/views/errorPage/401')
+  },
+  {
+    path: '/404',
+    name: '404',
+    hidden: true,
+    meta: { title: '404', icon: '' },
+    component: () => import('@/views/errorPage/404')
   }
 ]
 
