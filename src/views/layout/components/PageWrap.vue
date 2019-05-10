@@ -1,6 +1,8 @@
 <template>
   <div class="page-wrap">
-    <router-view />
+    <transition name="el-fade-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 

@@ -1,7 +1,9 @@
 import {
   _setCookie,
   _getCookie,
-  _removeCookie
+  _removeCookie,
+  _setSessionStore,
+  _getSessionStore
 } from '@/common/js/storage'
 import { getUserInfoApi, loginOutApi } from '@/api/user'
 
@@ -9,7 +11,7 @@ const user = {
   namespaced: true,
   state: {
     token: _getCookie('token'),
-    userInfo: ''
+    userInfo: _getSessionStore('userInfo')
   },
   mutations: {
     // 设置Token
@@ -36,6 +38,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfoApi().then(res => {
           if (res.success) {
+            _setSessionStore('userInfo', res.content[0], 'JSONStr')
             commit('SET_USERINFO', res.content[0])
             resolve()
           } else {

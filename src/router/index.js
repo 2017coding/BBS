@@ -121,6 +121,22 @@ export const routes = [
     meta: { title: '写文章' }
   },
   {
+    path: '/draft',
+    redirect: '/draft/child',
+    component: Layout,
+    name: '草稿',
+    meta: { title: '草稿' },
+    children: [
+      {
+        path: 'child',
+        alias: '/draft',
+        component: () => import('@/views/draft/index'),
+        name: '草稿' + +new Date(),
+        meta: { title: '草稿' }
+      }
+    ]
+  },
+  {
     path: '/401',
     name: '401',
     hidden: true,

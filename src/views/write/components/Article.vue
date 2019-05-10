@@ -18,6 +18,7 @@
           :value="item.value"
         />
       </el-select>
+      <select-tags class="select-tags" :limit="5" :placeholder="'请选择相关的标签'" />
     </div>
     <!-- 内容 -->
     <mavon-editor class="mavon-editor" :value.sync="query.content" :max-height="'100%'" />
@@ -55,6 +56,9 @@ export default {
     .config{
       display: flex;
       margin-bottom: 15px;
+      .select-tags{
+        flex: 1;
+      }
     }
     .mavon-editor{
       flex: 1;

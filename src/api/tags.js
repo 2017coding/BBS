@@ -8,3 +8,12 @@ export function getTagTypeApi (params) {
     params
   })
 }
+
+// 获取所有标签
+export function getTagApi (params) {
+  return request({
+    url: '/api/Tag/getAll',
+    method: 'get',
+    params
+  })
+}

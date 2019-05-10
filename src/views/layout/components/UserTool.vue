@@ -14,7 +14,7 @@
         trigger="click"
       >
         <ul class="create-type-list">
-          <li v-for="(item, index) in createTypeList.filter(item => item.show)" :key="index" class="item">
+          <li v-for="(item, index) in createTypeList.filter(item => item.show)" :key="index" :class="{[item.className]: item.className, item}">
             <router-link :to="item.path">{{ item.label }}</router-link>
           </li>
         </ul>
@@ -144,7 +144,7 @@ export default {
         { label: '发头条', show: false, path: '/write?type=submit' },
         { label: '写文章', show: true, path: '/write?type=write' },
         { label: '记笔记', show: false, path: '/write?type=record' },
-        { label: '草稿箱', show: false, path: '/write?type=draft' }
+        { label: '草稿箱', show: true, path: '/draft', className: 'draft' }
       ],
       // 用户菜单
       userMenu: [
@@ -465,6 +465,7 @@ export default {
   }
 </style>
 <style lang="scss">
+@import '@/common/style/mixin.scss';
 .user-tool{
   .el-dialog{
     top: 5vh;
@@ -490,6 +491,14 @@ export default {
       text-indent: 5px;
       &:hover{
         background: #e6e6e6;
+      }
+    }
+    .draft{
+      position: relative;
+      margin-top: 10px;
+      &::after{
+        @include border-1px('top');
+        top: -5px;
       }
     }
   }

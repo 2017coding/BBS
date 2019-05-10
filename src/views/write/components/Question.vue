@@ -14,6 +14,7 @@
           :value="item.value"
         />
       </el-select>
+      <select-tags class="select-tags" :limit="5" :placeholder="'请选择相关的标签'" />
     </div>
     <!-- 内容 -->
     <mavon-editor
@@ -26,9 +27,11 @@
 </template>
 
 <script>
+import SelectTags from '@/components/SelectTags'
 import MavonEditor from '@/components/MavonEditor'
 export default {
   components: {
+    SelectTags,
     MavonEditor
   },
   data () {
@@ -121,6 +124,9 @@ export default {
     .config{
       display: flex;
       margin-bottom: 15px;
+      .select-tags{
+        flex: 1;
+      }
     }
     .mavon-editor{
       flex: 1;
