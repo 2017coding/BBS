@@ -285,7 +285,8 @@ export default {
             .then(res => {
               if (res.success) {
                 if (type === 'login') {
-                  _setCookie('token', res.token)
+                  // 设置cookie过期时间为30天
+                  _setCookie('token', res.token, { expires: 30 })
                   // 设置cookie
                   this.$store.dispatch('user/setToken', res.token)
                   // 设置

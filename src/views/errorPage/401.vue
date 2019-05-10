@@ -11,8 +11,8 @@
           <li class="link-type">
             <router-link to="/">回首页</router-link>
           </li>
-          <li class="link-type"><a href="https://www.taobao.com/">逛逛淘宝</a></li>
-          <li class="link-type"><a href="https://github.com/">刷刷github</a></li>
+          <li class="link-type"><a href="https://www.taobao.com/" target="_blank">逛逛淘宝</a></li>
+          <li class="link-type"><a href="https://github.com/2017coding/BBS" target="_blank">刷刷github</a></li>
           <li><a href="#" @click.prevent="dialogVisible=true">点我看图</a></li>
         </ul>
       </el-col>

@@ -26,8 +26,8 @@ const user = {
     setToken ({ commit }, data) {
       return new Promise((resolve, reject) => {
         commit('SET_TOKEN', data)
-        // 将数据存到缓存
-        _setCookie('token', data)
+        // 设置cookie过期时间为30天
+        _setCookie('token', data, { expires: 30 })
         resolve()
       })
     },
