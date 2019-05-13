@@ -1,5 +1,5 @@
 <template>
-  <div class="page-questions">
+  <div class="page-container">
     <div class="main">
       <!-- <el-button
         class="create"
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-questions{
+.page-container{
   display: flex;
   .main{
     position: relative;

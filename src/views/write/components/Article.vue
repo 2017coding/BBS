@@ -18,7 +18,7 @@
           :value="item.value"
         />
       </el-select>
-      <select-tags class="select-tags" :limit="5" :placeholder="'请选择相关的标签'" />
+      <select-tags v-model="query.tags" class="select-tags" :limit="5" :placeholder="'请选择相关的标签'" />
     </div>
     <!-- 内容 -->
     <mavon-editor class="mavon-editor" :value.sync="query.content" :max-height="'100%'" />
@@ -26,20 +26,72 @@
 </template>
 
 <script>
+import SelectTags from '@/components/SelectTags'
 import MavonEditor from '@/components/MavonEditor'
+import { createArticleApi, updateArticleApi } from '@/api/write'
 export default {
   components: {
+    SelectTags,
     MavonEditor
+  },
+  props: {
+    writeStatus: {
+      type: String,
+      default: 'create'
+    }
   },
   data () {
     return {
       columnList: [],
+      handleStatus: false,
       query: {
+        id: '',
         type: '1',
         title: '',
         column: '',
+        tags: [],
         content: ''
       }
+    }
+  },
+  watch: {
+    'query.title' () {
+      if (this.handleStatus) return
+      this.dataChange()
+    },
+    'query.tags' () {
+      if (this.handleStatus) return
+      this.dataChange()
+    },
+    'query.content' () {
+      if (this.handleStatus) return
+      this.dataChange()
+    }
+  },
+  methods: {
+    // 数据改变要做的事情
+    dataChange () {
+      this.handleStatus = true
+      this.$emit('update:writeStatus', 'save')
+      const query = this.query
+      const api = query.id ? createArticleApi : updateArticleApi
+      // 五秒后进行数据创建或者编辑的操作
+      setTimeout(() => {
+        api(query).then(res => {
+          this.handleStatus = false
+          if (res.success) {
+            if (!query.id) {
+              query.id = res.content.id
+            }
+            this.$emit('update:writeStatus', 'finish')
+          } else {
+            this.$emit('update:writeStatus', 'unfinish')
+          }
+        }).catch(() => {
+          this.handleStatus = false
+          this.$emit('update:writeStatus', 'unfinish')
+        })
+      }, 1000)
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-home">
+  <div class="page-container">
     <sidebar />
     <Main />
     <div class="right">
@@ -36,7 +36,7 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
-  .page-home{
+  .page-container{
     display: flex;
     .right{
       padding: 0 15px;

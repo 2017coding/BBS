@@ -9,10 +9,13 @@
         <p class="title">{{ title }}</p>
       </div>
       <div class="right">
+        {{ saveMsg[writeStatus] }}
         <el-button
           type="primary"
           size="medium"
           style="padding: 8px 8px;"
+          :loading="btLoading"
+          @click="handleClick('save')"
         >{{ btMsg }}</el-button>
       </div>
     </nav>
@@ -23,14 +26,28 @@
 export default {
   props: {
     type: {
-      type: Number,
-      default: 1 // 1 文章 2 问题
+      type: String,
+      default: 'Article'
+    },
+    btLoading: {
+      type: Boolean,
+      default: false
+    },
+    writeStatus: {
+      type: String,
+      default: 'create'
     }
   },
   data () {
     return {
       title: '',
-      btMsg: ''
+      btMsg: '',
+      saveMsg: {
+        create: '',
+        save: '保存中...',
+        finish: '已保存草稿',
+        unfinish: '保存失败'
+      }
     }
   },
   mounted () {
@@ -39,15 +56,18 @@ export default {
   methods: {
     initData () {
       switch (this.type) {
-        case 1:
+        case 'Article':
           this.title = '写文章'
           this.btMsg = '发布文章'
           break
-        case 2:
+        case 'Question':
           this.title = '提问'
           this.btMsg = '发布问题'
           break
       }
+    },
+    handleClick (type, data) {
+      this.$emit('handleClick', type, data)
     }
   }
 }

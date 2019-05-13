@@ -28,7 +28,7 @@ export default {
       }
       // 如果用户没有登录，进入这些页面将重定向到401页面
       if (!this.userInfo) {
-        const inaccessibleList = ['/write']
+        const inaccessibleList = ['/write', '/draft']
         if (inaccessibleList.includes(val.path)) {
           this.$router.push('/401')
           return

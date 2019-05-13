@@ -1,8 +1,13 @@
 <template>
-  <div class="write">
-    <Navbar />
+  <div class="page-container">
+    <Navbar
+      :type="getType()"
+      :bt-loading="btLoading"
+      :write-status="writeStatus"
+      @handleClick="handleClick"
+    />
     <div class="main">
-      <components :is="getComponents()" />
+      <components :is="getType()" :write-status.sync="writeStatus" />
     </div>
   </div>
 </template>
@@ -20,17 +25,29 @@ export default {
   },
   data () {
     return {
+      btLoading: false,
+      writeStatus: ''
     }
   },
   mounted () {
   },
   methods: {
-    getComponents () {
+    getType () {
       switch (this.$route.query.type) {
         case 'ask':
           return 'Question'
         case 'write':
           return 'Article'
+      }
+    },
+    handleClick (type, data) {
+      switch (type) {
+        case 'save':
+          this.btLoading = true
+          setTimeout(() => {
+            this.btLoading = false
+          }, 1000)
+          break
       }
     }
   }
@@ -41,7 +58,7 @@ export default {
   @import '@/common/style/base.scss';
   $maxWidth: 1480px;
   $minWidth: 720px;
-  .write{
+  .page-container{
     display: flex;
     flex-direction: column;
     height: 100%;

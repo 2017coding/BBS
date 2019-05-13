@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="page-container">
   </div>
 </template>
 

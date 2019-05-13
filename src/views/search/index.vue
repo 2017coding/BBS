@@ -1,5 +1,5 @@
 <template>
-  <div class="page-search">
+  <div class="page-container">
     搜索页面
   </div>
 </template>

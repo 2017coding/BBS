@@ -14,7 +14,7 @@
           :value="item.value"
         />
       </el-select>
-      <select-tags class="select-tags" :limit="5" :placeholder="'请选择相关的标签'" />
+      <select-tags v-model="query.tags" class="select-tags" :limit="5" :placeholder="'请选择相关的标签'" />
     </div>
     <!-- 内容 -->
     <mavon-editor
@@ -46,6 +46,7 @@ export default {
       query: {
         type: '1',
         title: '',
+        tags: [],
         content: ''
       }
     }

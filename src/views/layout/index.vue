@@ -1,7 +1,7 @@
 <template>
   <div class="BBS">
     <navbar />
-    <page-wrap />
+    <page-main />
     <footerbar />
     <back-to-top />
   </div>
@@ -9,14 +9,14 @@
 
 <script>
 import Navbar from './components/Navbar'
-import PageWrap from './components/PageWrap'
+import PageMain from './components/PageMain'
 import Footerbar from './components/Footerbar'
 import BackToTop from '@/components/BackToTop'
 export default {
   name: 'Layout',
   components: {
     Navbar,
-    PageWrap,
+    PageMain,
     Footerbar,
     BackToTop
   },

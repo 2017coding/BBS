@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrap">
+  <div class="page-main">
     <transition name="el-fade-in">
       <router-view />
     </transition>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'PageWrap',
+  name: 'PageMain',
   data () {
     return {
     }
@@ -18,7 +18,7 @@ export default {
 
 <style scoped lang="scss">
   @import '@/common/style/base.scss';
-  .page-wrap{
+  .page-main{
     position: relative;
     max-width: $maxWidth;
     min-width: $minWidth;

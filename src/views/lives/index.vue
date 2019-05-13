@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="page-container">
     4
   </div>
 </template>

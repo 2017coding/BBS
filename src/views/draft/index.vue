@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-container">
     草稿
   </div>
 </template>
