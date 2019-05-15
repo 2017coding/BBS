@@ -2,11 +2,10 @@
   <div class="write-article">
     <!-- 标题 -->
     <div class="title">
-      <el-input v-model="query.title" :autofocus="true" class="input-with-select" placeholder="标题: 和你讲讲我的故事">
-        <el-select slot="prepend" v-model="query.type" placeholder="请选择">
-          <el-option label="原创" value="1" />
-        </el-select>
-      </el-input>
+      <el-select v-model="query.type" placeholder="请选择">
+        <el-option label="原创" value="1" />
+      </el-select>
+      <el-input v-model="query.title" :autofocus="true" class="input-with-select" placeholder="标题: 和你讲讲我的故事" />
     </div>
     <!-- 相关设置 -->
     <div class="config">
@@ -74,7 +73,7 @@ export default {
       this.handleStatus = true
       this.$emit('update:writeStatus', 'save')
       const query = this.query
-      const api = query.id ? createArticleApi : updateArticleApi
+      const api = query.id ? updateArticleApi : createArticleApi
       // 五秒后进行数据创建或者编辑的操作
       setTimeout(() => {
         api(query).then(res => {
@@ -103,7 +102,11 @@ export default {
     flex-direction: column;
     height: 100%;
     .title{
+      display: flex;
       margin-bottom: 15px;
+      .el-select{
+        width: 100px;
+      }
     }
     .config{
       display: flex;

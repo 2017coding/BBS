@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import { _getCookie } from '@/common/js/storage'
+import { _getCookie, _removeCookie } from '@/common/js/storage'
 import globalFn from '@/common/js/utils'
 
 // create an axios instance
@@ -80,18 +80,13 @@ service.interceptors.response.use(
           tips = '用户信息错误, 请重新登录'
           btMsg = '重新登录'
           break
-      // case 20203:
-      //   tips = '用户未绑定角色，无法登陆'
-      //   btMsg = '确定'
-      //   break
       }
       MessageBox.alert(tips, {
         confirmButtonText: btMsg,
         type: 'info'
       }).then(() => {
-        store.dispatch('user/loginOut').then(() => {
-          location.reload() // 为了重新实例化vue-router对象 避免bug
-        })
+        _removeCookie('token')
+        location.reload() // 为了重新实例化vue-router对象 避免bug
       }).catch(() => {
       })
       return Promise.reject('error')
