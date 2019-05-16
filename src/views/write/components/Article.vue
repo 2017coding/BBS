@@ -42,12 +42,12 @@ export default {
   data () {
     return {
       columnList: [],
-      handleStatus: false,
+      timer: null,
       query: {
-        id: '',
+        id: 3,
         type: '1',
         title: '',
-        column: '',
+        column_id: '',
         tags: [],
         content: ''
       }
@@ -55,29 +55,27 @@ export default {
   },
   watch: {
     'query.title' () {
-      if (this.handleStatus) return
       this.dataChange()
     },
     'query.tags' () {
-      if (this.handleStatus) return
       this.dataChange()
     },
-    'query.content' () {
-      if (this.handleStatus) return
+    'query.content' (val) {
       this.dataChange()
     }
   },
   methods: {
     // 数据改变要做的事情
     dataChange () {
-      this.handleStatus = true
       this.$emit('update:writeStatus', 'save')
       const query = this.query
       const api = query.id ? updateArticleApi : createArticleApi
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
       // 五秒后进行数据创建或者编辑的操作
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         api(query).then(res => {
-          this.handleStatus = false
           if (res.success) {
             if (!query.id) {
               query.id = res.content.id
@@ -87,10 +85,9 @@ export default {
             this.$emit('update:writeStatus', 'unfinish')
           }
         }).catch(() => {
-          this.handleStatus = false
           this.$emit('update:writeStatus', 'unfinish')
         })
-      }, 1000)
+      }, 5000)
     }
   }
 }

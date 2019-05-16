@@ -36,6 +36,11 @@ export default {
   },
   watch: {
     editorValue (val) {
+      // 内部数据和外部不一样, 修改外部数据
+      if (val !== this.value) {
+        this.$emit('update:value', val)
+        return
+      }
       // 传入参数修改，不派发
       if (this.flag === 'outside') {
         this.flag = 'inner'
@@ -47,8 +52,7 @@ export default {
       handler: function (val) {
         this.flag = 'outside' // 标识为传入参数修改
         this.editorValue = val
-      },
-      immediate: true
+      }
     }
   },
   methods: {

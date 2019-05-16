@@ -18,13 +18,14 @@ service.interceptors.request.use(config => {
     config.headers['Authorization'] = _getCookie('token')
   }
   // 对全局参数做过滤，把不存在的参数删除
-  if (config.method === 'post') {
+  if (config.data) {
     for (const key in config.data) {
       if (!config.data[key] && config.data[key] !== 0) {
         delete config.data[key]
       }
     }
-  } else if (config.method === 'get') {
+  }
+  if (config.params) {
     for (const key in config.params) {
       if (!config.params[key] && config.params[key] !== 0) {
         delete config.params[key]
