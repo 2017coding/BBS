@@ -1,5 +1,4 @@
 import { Message } from 'element-ui'
-
 export default {
   /**
    * 通过ID找到在列表中对应的名字
@@ -104,6 +103,30 @@ export default {
     str = str.replace('ss', (dateStr.getSeconds() < 10 ? '0' : '') + dateStr.getSeconds())
 
     return str
+  },
+  /**
+   * 时间显示
+   */
+  timeView: function (val) {
+    const now = +new Date() // 当时时间
+    const timeStamp = +new Date(val) // 需要处理的时间
+    const result = now - timeStamp // 相差的时间戳
+    const min = 60 * 1000 // 分钟的毫秒数
+    const hour = 60 * 60 * 1000 // 小时的毫秒数
+    const day = 60 * 60 * 1000 * 24 // 日的毫秒数
+    if (result / min < 1) {
+      return '刚刚发布'
+    } else if (result / min < 60) {
+      return Math.floor(result / min) + '分钟前'
+    } else if (result / hour > 1 && result / hour < 24) {
+      return Math.floor(result / hour) + '小时前'
+    } else if (result / day > 1 && result / day < 7) {
+      return Math.floor(result / day) + '天前'
+    } else if (this.switchTime(now, 'YYYY') === this.switchTime(timeStamp, 'YYYY')) {
+      return this.switchTime(timeStamp, 'MM月DD日')
+    } else {
+      return this.switchTime(timeStamp, 'YYYY年MM月DD日')
+    }
   },
   /**
    * a模拟window.open，不会被浏览器拦截

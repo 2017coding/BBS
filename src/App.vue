@@ -6,6 +6,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import io from 'socket.io-client'
 export default {
   name: 'App',
   computed: {
@@ -17,6 +18,12 @@ export default {
     $route (val) {
       this.invalidRoute(val)
     }
+  },
+  mounted () {
+    var socket = io('http://www.lyh.red:1313')
+    socket.on('connect', function () {
+      console.log(1)
+    })
   },
   methods: {
     invalidRoute (val) {

@@ -8,11 +8,11 @@
             <p class="title">{{ item.title }}</p>
             <p class="body">{{ item.content }}</p>
           </div>
-          <div class="img" :style="`background-image: url(${require('@/assets/image/home/b1.png')})`" />
+          <!-- <div class="img" :style="`background-image: url(${require('@/assets/image/home/b1.png')})`" /> -->
         </div>
         <div class="info">
           <div class="praise">
-            <span class="wrap"><i class="el-icon-good" /></span>
+            <span class="wrap"><i class="el-icon-albb-good" /></span>
             <span v-if="item.praiseNums > 0">
               <span class="unit">x</span>
               <span class="praisenums">{{ item.praiseNums }}</span>
@@ -20,9 +20,9 @@
             <span class="dot">·</span>
             <span class="votes-word">赞</span>
           </div>
-          <div class="author">{{ item.author }}</div>
+          <div class="author">{{ item.create_user_name }}</div>
           <span class="dot" style="padding: 0 5px">·</span>
-          <div class="release-time">{{ item.releaseTime }}</div>
+          <div class="release-time">{{ $fn.timeView(item.create_time) }}</div>
         </div>
       </li>
     </template>
@@ -47,7 +47,8 @@ export default {
         data: [],
         query: {
           curPage: 1,
-          pageSize: 20
+          pageSize: 20,
+          flag: 3 // 审核通过的文章
         }
       }
     }

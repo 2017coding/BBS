@@ -44,7 +44,7 @@ export default {
       columnList: [],
       timer: null,
       query: {
-        id: 3,
+        id: '',
         type: '1',
         title: '',
         column_id: '',
@@ -75,6 +75,9 @@ export default {
       }
       // 五秒后进行数据创建或者编辑的操作
       this.timer = setTimeout(() => {
+        if (!query.title) {
+          query.title = '未指定标题的文章'
+        }
         api(query).then(res => {
           if (res.success) {
             if (!query.id) {
