@@ -49,6 +49,13 @@ export const routes = [
         component: () => import('@/views/columns/index'),
         name: '专栏' + +new Date(),
         meta: { title: '专栏' }
+      },
+      {
+        path: 'article/:id',
+        alias: '/article',
+        component: () => import('@/views/columns/article/index'),
+        name: '文章' + +new Date(),
+        meta: { title: '文章' }
       }
     ]
   },

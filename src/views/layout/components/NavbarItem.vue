@@ -2,9 +2,11 @@
   <nav class="menu">
     <template v-for="item in routes.filter(item => item.meta.isMenu)">
       <!-- 一级菜单循环 -->
-      <router-link v-if="hasOneShowingChildren(item, item.children) && (!item.children[0].children || item.children[0].children.length === 0)" :key="item.path" :to="resolvePath(item)">
-        <span class="menu-title">{{ item.meta.title }}</span>
-      </router-link>
+      <template v-if="hasOneShowingChildren(item, item.children) && (!item.children[0].children || item.children[0].children.length === 0)">
+        <router-link :key="item.path" :to="resolvePath(item)">
+          <span class="menu-title">{{ item.meta.title }}</span>
+        </router-link>
+      </template>
       <!-- 多级菜单的循环 -->
       <template v-else>
         <div :key="item.meta.title" class="submenu" style="display: inline-block">

@@ -293,13 +293,14 @@ export default {
                   this.$store.dispatch('user/setUserInfo', res.content.data)
                 }
                 dialogInfo.visible = false
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: res.message,
+                  type: res.success ? 'success' : 'error',
+                  duration: 3500
+                })
               }
-              this.$message({
-                showClose: true,
-                message: res.message,
-                type: res.success ? 'success' : 'error',
-                duration: 3500
-              })
               dialogInfo.btLoading = false
             })
             .catch(() => {

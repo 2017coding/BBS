@@ -1,7 +1,7 @@
 <template>
   <ul class="page-article-list">
     <template v-if="listInfo.data.length > 0">
-      <li v-for="(item, index) in listInfo.data" :key="index" class="article-item">
+      <li v-for="(item, index) in listInfo.data" :key="index" class="article-item" @click="handleGoto(item.id)">
         <div class="from" />
         <div class="article">
           <div class="content">
@@ -17,7 +17,7 @@
               <span class="unit">x</span>
               <span class="praisenums">{{ item.praiseNums }}</span>
             </span>
-            <span class="dot">·</span>
+            <span class="dot"> · </span>
             <span class="votes-word">赞</span>
           </div>
           <div class="author">{{ item.create_user_name }}</div>
@@ -71,6 +71,11 @@ export default {
           })
         }
       })
+    },
+    handleGoto (id) {
+      this.$router.push({
+        path: `/columns/article/${id}`
+      })
     }
   }
 }
@@ -95,6 +100,16 @@ export default {
           .body{
             color: #888;
             line-height: 1.5;
+            // 超出两行显示省略号
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          &:hover{
+            .title, .body{
+              text-decoration: underline;
+            }
           }
         }
         .img{
@@ -110,6 +125,7 @@ export default {
       .info{
         display: flex;
         align-items: center;
+        transition: all .3s linear;
         .praise{
           cursor: pointer;
           .wrap{
@@ -133,7 +149,8 @@ export default {
               transition: .3s;
               background: $theme;
             }
-            .el-icon-good{
+            .el-icon-albb-good{
+              font-weight: bold;
               color: rgb(245, 245, 245);
             }
             .votes-word{
@@ -144,6 +161,7 @@ export default {
         }
         .author{
           margin-left: 20px;
+          font-weight: bold;
           cursor: pointer;
           &:hover{
             text-decoration: underline;

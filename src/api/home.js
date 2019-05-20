@@ -17,3 +17,10 @@ export function getArticleListApi (params) {
     params
   })
 }
+
+export function getArticleInfoApi (id) {
+  return request({
+    url: `api/Article/getRow/${id}`,
+    method: 'get'
+  })
+}
