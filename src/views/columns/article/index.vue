@@ -1,7 +1,7 @@
 <template>
   <div class="page-container aaa">
     <div class="main">
-      <p class="title">{{ articleInfo.title }}</p>
+      <h1 class="title">{{ articleInfo.title }}</h1>
       <div class="markdown" v-html="marked(articleInfo.content)" />
     </div>
   </div>
@@ -51,7 +51,7 @@ export default {
     width: 75%;
     padding-left: 10px;
     .title{
-      font-size: 32px;
+      font-size: 30px;
       font-weight: bold;
       color: black;
       margin-bottom: 40px;
