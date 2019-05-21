@@ -30,7 +30,7 @@ export default {
       if (currentScroll > 0) {
         window.scrollTo(0, currentScroll - this.speed)
         // 加速
-        this.speed += 1
+        this.speed += 5
         this.timer = requestAnimationFrame(() => {
           this.backToTop()
         })

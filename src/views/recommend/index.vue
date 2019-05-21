@@ -1,6 +1,5 @@
 <template>
-  <div class="page-container">
-  </div>
+  <div class="page-container" />
 </template>
 
 <script>

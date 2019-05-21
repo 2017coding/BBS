@@ -14,7 +14,9 @@
             <a class="link-type" href="https://www.taobao.com/" target="_blank">淘宝网</a>
           </div>
           <div class="bullshit__headline">{{ message }}</div>
-          <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页</div>
+          <div class="bullshit__info">
+            <!-- 请检查您输入的网址是否正确，请点击以下按钮返回主页 -->
+          </div>
           <a icon="arrow-left" class="bullshit__return-home" @click="back">返回</a>
           <a href="" class="bullshit__return-home" style="margin-left: 20px;">返回首页</a>
         </div>
