@@ -1,6 +1,13 @@
 <template>
   <div class="page-container aaa">
     <div class="main">
+      <div class="">专栏 / 文章详情</div>
+      <div class="">
+        <img :src="articleInfo.avatar">
+        <p class="title">{{ articleInfo.create_user_name }}</p>
+        <p class="time">{{ $fn.timeView(articleInfo.create_time) }}</p>
+        <a class="time">{{ '关注作者' }}</a>
+      </div>
       <p class="title">{{ articleInfo.title }}</p>
       <div class="markdown" v-html="marked(articleInfo.content)" />
     </div>

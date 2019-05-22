@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import { _getCookie, _removeCookie } from '@/common/js/storage'
+import { _getCookie, _removeCookie, _removeSessionStore } from '@/common/js/storage'
 import globalFn from '@/common/js/utils'
 
 // create an axios instance
@@ -87,6 +87,7 @@ service.interceptors.response.use(
         type: 'info'
       }).then(() => {
         _removeCookie('token')
+        _removeSessionStore('userInfo')
         location.reload() // 为了重新实例化vue-router对象 避免bug
       }).catch(() => {
       })

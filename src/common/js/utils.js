@@ -1,7 +1,7 @@
 import { Message } from 'element-ui'
 export default {
   /**
-   * 通过ID找到在列表中对应的名字
+   * 通过key找到在列表中对应的显示
    * @param {Object} obj
    *  @param obj.dataList 数据列表
    *  @param obj.value    数据的值对应的字段名称   例如 'value'
@@ -21,7 +21,7 @@ export default {
     return name
   },
   /**
-   * 对请求失败的HTTP状态吗做处理
+   * 对请求失败的HTTP状态码做处理
    * @param {Number} code     HTTP状态码
    * @param {String} message  错误提示
    * @return message 返回处理过的提示信息
@@ -150,8 +150,8 @@ export default {
     a.click()
   },
   /**
-   * 复制dom的内容
-   * @param {String} id dom的ID
+   * 复制
+   * @param {String} value 要复制的值
    */
   copyData (value) {
     const inputDom = document.createElement('input')
@@ -211,57 +211,6 @@ export default {
       })
     }
     return arr1
-  },
-  // 为tree数据结构添加name，好获取子节点至根节点的全部路径 S0812A
-  methoss: (arr, pathName) => {
-    arr.forEach(item => {
-      // 对一级菜单处理
-      item.pathName = pathName ? pathName + '/' + item.mod_name : item.mod_name
-      // 对子级处理
-      item.children.forEach(childItem => {
-        childItem.pathName = pathName ? pathName + '/' + item.mod_name + '/' + childItem.mod_name : item.mod_name + '/' + childItem.mod_name
-
-        if (childItem.children) {
-          this.methoss(childItem.children, childItem.pathName)
-        }
-      })
-    })
-  },
-  /**
-    * 根据页面的头部, 功能框, 分页组件等高度，计算出table的高度
-    */
-  getTableHeight () {
-    // 当表格存在的时候才执行操作
-    if (document.getElementsByClassName('el-table').length === 0) {
-      return
-    }
-    const boxH = document.body.clientHeight
-    const navH = document.getElementsByClassName('navbar-container')[0].clientHeight
-    const navInfoH = document.getElementsByClassName('nav-info')[0].clientHeight
-    const filterContainer = document.getElementsByClassName('filter-container')[0] || { clientHeight: 0 }
-    const filterContainerH = filterContainer.clientHeight
-    const pageContainer = document.getElementsByClassName('pagination-container')[0] || { clientHeight: 0 }
-    const pageContainerH = pageContainer.clientHeight ? pageContainer.clientHeight + 15 : pageContainer.clientHeight - 35
-    const tab = document.getElementsByClassName('el-table')[0] || { offsetTop: 0 }
-    const tabOffT = tab.offsetTop
-
-    // 表格的高度 = 视口高度 - 表格到头部导航的距离 - 头部导航的高度137 - 分页组件的高度100 - 分页组件
-    document.getElementsByClassName('el-table')[0].style.height = (boxH - tabOffT - navH - navInfoH - filterContainerH - pageContainerH) + 'px'
-    return (boxH - tabOffT - navH - navInfoH - filterContainerH - pageContainerH)
-  },
-  /**
-   * 用来判断对象不存在时，返回的字段数据
-   * @param {Object} obj 对象
-   * @param {String} key 要使用的属性
-   * @param {String} staticName 属性不存在时使用的值
-   */
-  useWhichData (obj, key, staticName) {
-    console.log(obj)
-    if (obj && obj[key]) {
-      return obj[key]
-    } else {
-      return staticName
-    }
   },
   /**
    * 数组去重
@@ -337,18 +286,13 @@ export default {
     // return data
   },
   /**
-   * 得到当前主机地址
-   */
-  getHost () {
-    return process.env.NODE_ENV === 'development' ? process.env.excelURL : window.location.origin
-  },
-  /**
-   * 传入搜索框字符串，将问号后面字符得到并转换为对象
-   * @param {String} str
+   * 搜索框字符串，将问号后面字符得到并转换为对象
    * @return {Object}
    */
-  getLocationSearch (str) {
-    const arr = str.substr(1).split('&'); const obj = {}
+  getLocationSearch () {
+    const str = window.location.search
+    const arr = str.substr(1).split('&')
+    const obj = {}
     for (const item of arr) {
       const data = item.split('=')
       obj[data[0]] = data[1]
