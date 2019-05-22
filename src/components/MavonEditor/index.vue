@@ -141,7 +141,6 @@ $theme: red;
   h2 {
     font-size: 1.4em;
     margin: 40px 10px 20px 0;
-    padding-left: 9px;
     font-weight: 700;
     line-height: 1.4;
   }
@@ -190,11 +189,12 @@ $theme: red;
   }
   a {
     color: $theme;
-    text-decoration: none;
+    text-decoration: underline;
+    opacity: .8;
   }
   a:hover {
     color: $theme;
-    text-decoration: underline;
+    opacity: 1;
   }
   a:focus {
     outline-offset: -2px;
@@ -222,8 +222,6 @@ $theme: red;
   del {
     text-decoration: line-through;
   }
-  /*code {font-size:90%;}*/
-  /*pre {text-align:left; overflow-x: scroll; color: #257fa0; background: #f6f6f6; padding: 10pt 15pt; border-radius: 3px; border: solid 1px #e2e2e2;}*/
   pre {
     max-height: 600px;
     overflow: auto;
@@ -243,7 +241,7 @@ $theme: red;
     font-family: Courier, sans-serif;
   }
   code {
-    color: $theme;
+    // color: $theme;
     border-radius: 4px;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     padding: 2px 4px;
@@ -279,6 +277,7 @@ $theme: red;
   li {
     margin-bottom: 0.75em;
     margin-top: 0.75em;
+    list-style: inherit;
   }
   ol#footnotes {
     font-size: 0.95em;
