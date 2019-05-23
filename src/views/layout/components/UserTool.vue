@@ -18,9 +18,9 @@
             <router-link :to="item.path">{{ item.label }}</router-link>
           </li>
         </ul>
-        <a slot="reference" class="bt-created">
+        <span slot="reference" class="bt-created">
           创建<i class="el-icon-caret-bottom" />
-        </a>
+        </span>
       </el-popover>
       <router-link to="">
         <i class="el-icon-bell" />

@@ -55,14 +55,23 @@ export default {
   },
   methods: {
     initData () {
+      const id = this.$route.query.id
       switch (this.type) {
         case 'Article':
           this.title = '写文章'
           this.btMsg = '发布文章'
+          if (id) {
+            this.title = '编辑文章'
+            this.btMsg = '保存编辑'
+          }
           break
         case 'Question':
           this.title = '提问'
           this.btMsg = '发布问题'
+          if (id) {
+            this.title = '编辑问题'
+            this.btMsg = '保存编辑'
+          }
           break
       }
     },
