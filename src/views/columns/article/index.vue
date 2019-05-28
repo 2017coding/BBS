@@ -23,7 +23,7 @@
           ·
           <span class="read-time">读完需要 {{ articleInfo.readTime }} 分钟</span>
           ·
-          <router-link :to="`/write?type=write&id=${articleInfo.id}`" class="update">编辑</router-link>
+          <router-link v-if="userInfo && articleInfo.create_user === userInfo.id" :to="`/write?type=write&id=${articleInfo.id}`" class="update">编辑</router-link>
         </span>
       </div>
       <div class="markdown" v-html="marked(articleInfo.content)" />
@@ -46,7 +46,7 @@
         </ul>
       </div>
       <!-- 评论 -->
-      <div class="comments">
+      <div v-if="userInfo" class="comments">
         <p class="title">评论</p>
         <div class="content">
           <i :style="`background-image: url(${userInfo.avatar})`" class="avatar" />
