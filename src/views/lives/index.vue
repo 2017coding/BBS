@@ -1,22 +1,13 @@
 <template>
-  <div class="page-container">
-    <hhh />
+  <div>
+    讲堂
   </div>
 </template>
 
 <script>
-import hhh from './home/index'
 export default {
-  components: {
-    hhh
-  },
-  data () {
-    return {
-    }
-  }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

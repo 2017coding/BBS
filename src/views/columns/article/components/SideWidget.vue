@@ -29,7 +29,7 @@ export default {
     border: 1px solid #DDD;
     background: #FFF;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 9;
     transition: all .3s linear;
     &:hover{
       color: red;

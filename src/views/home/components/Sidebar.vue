@@ -23,10 +23,10 @@
           @click="handleClick('click', item)"
         >
           <span class="icon-box">
-            <img v-if="item.type === 2" :src="item.icon" class="icon">
+            <img v-if="item.image" :src="item.image" class="icon">
             <i v-else class="el-icon-albb-discount" />
           </span>
-          <span class="name">{{ item.name }}</span>
+          <span class="name">{{ item.name || item.title }}</span>
         </li>
       </ul>
     </div>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getTagTypeApi } from '@/api/tags'
+import { getTechSquareApi } from '@/api/home'
 export default {
   data () {
     return {
@@ -64,12 +64,9 @@ export default {
   },
   methods: {
     getTagType () {
-      getTagTypeApi().then(res => {
+      getTechSquareApi({ status: 1 }).then(res => {
         if (res.success) {
-          this.technologyClass = res.content.filter(item => {
-            item.type = 2
-            return item.icon
-          })
+          this.technologyClass = res.content
           this.technologyClass.push(
             { id: '更多标签', type: 3, name: '更多标签', icon: 'el-icon-albb-discount' }
           )

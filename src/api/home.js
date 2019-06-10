@@ -1,5 +1,14 @@
 import request from '@/common/js/request'
 
+// 得到技术频道列表
+export function getTechSquareApi (params) {
+  return request({
+    url: '/api/techSquare/getAll',
+    method: 'get',
+    params
+  })
+}
+
 // 得到轮播列表
 export function getCarouselApi (params) {
   return request({

@@ -87,21 +87,21 @@ export const routes = [
         alias: '/circle',
         component: () => import('@/views/found/circle/index'),
         name: '圈子' + +new Date(),
-        meta: { title: '圈子' }
+        meta: { title: '圈子', isMenu: true }
       },
       {
         path: 'activity',
         alias: '/activity',
         component: () => import('@/views/found/activity/index'),
         name: '活动' + +new Date(),
-        meta: { title: '活动' }
+        meta: { title: '活动', isMenu: true }
       },
       {
         path: 'tags',
         alias: '/tags',
         component: () => import('@/views/found/tags/index'),
         name: '标签' + +new Date(),
-        meta: { title: '标签' }
+        meta: { title: '标签', isMenu: true }
       }
     ]
   },
