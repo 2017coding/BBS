@@ -1,12 +1,39 @@
 <template>
   <div class="notices">
-    免费讲座：如何成为一名合格的工程师？
+    <a :href="notices.href" target="_blank">
+      {{ notices.content }}
+    </a>
   </div>
 </template>
 
 <script>
+import { getNoticesApi } from '@/api/home'
+
 export default {
-  name: 'Notices'
+  name: 'Notices',
+  data () {
+    return {
+      notices: {
+        content: '欢迎来到LLyh',
+        href: 'https://github.com/2017coding'
+      }
+    }
+  },
+  mounted () {
+    this.getNotices()
+  },
+  methods: {
+    getNotices () {
+      getNoticesApi().then(res => {
+        if (res.success) {
+          this.notices = {
+            content: res.content[0].content,
+            href: res.content[0].href
+          }
+        }
+      })
+    }
+  }
 }
 </script>
 

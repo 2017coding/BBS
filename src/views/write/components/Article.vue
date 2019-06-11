@@ -74,6 +74,9 @@ export default {
           this.form[key] = val[key]
         }
       }
+      this.form.tags = val.tagList.map(item => {
+        return item.id
+      })
       clearTimeout(this.timer)
     },
     'form.title' () {
@@ -135,7 +138,7 @@ export default {
         }).catch(() => {
           this.$emit('update:writeStatus', 'unfinish')
         })
-      }, 5000)
+      }, 1000)
     }
   }
 }

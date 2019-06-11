@@ -18,6 +18,13 @@
       <p class="title">{{ articleInfo.title }}</p>
       <div class="article-info">
         <span :class="'tag ' + getClass(articleInfo.type)">{{ $fn.getDataName({dataList: listTypeInfo.articleTypeList, value: 'value', label: 'key', data: articleInfo.type}) }}</span>
+        <span
+          v-for="(item, index) in articleInfo.tagList"
+          :key="index"
+          :class="'tag ' + getClass('article-tag')"
+        >
+          {{ item.name }}
+        </span>
         <span class="more">
           <span class="read-times">0次阅读</span>
           ·
@@ -142,6 +149,8 @@ export default {
       switch (type) {
         case 1:
           return 'original'
+        case 'article-tag':
+          return 'article-tag'
       }
     }
   }
@@ -203,9 +212,16 @@ export default {
         color: #017E66;
         background: rgba(1,126,102,0.08);
       }
+      .article-tag{
+        margin-left: 10px;
+        color: #F2AE43;
+        background: rgba(242,174,67,0.25);
+      }
       .more{
         margin-left: 10px;
         .update{
+          margin: 10px 0;
+          display: inline-block;
           color: red;
           opacity: .8;
           &:hover{

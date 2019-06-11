@@ -18,6 +18,14 @@ export function getCarouselApi (params) {
   })
 }
 
+// 获取通知
+export function getNoticesApi () {
+  return request({
+    url: '/api/notices/get',
+    method: 'get'
+  })
+}
+
 // 得到文章列表
 export function getArticleListApi (params) {
   return request({
@@ -27,6 +35,7 @@ export function getArticleListApi (params) {
   })
 }
 
+// 获取文章详情
 export function getArticleInfoApi (id) {
   return request({
     url: `api/Article/getRow/${id}`,
