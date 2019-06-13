@@ -21,10 +21,6 @@
 import { getTagApi } from '@/api/tags'
 export default {
   name: 'SelectTags',
-  model: {
-    prop: 'value',
-    event: 'select'
-  },
   props: {
     size: {
       type: String,
@@ -37,10 +33,14 @@ export default {
     placeholder: {
       type: String,
       default: '请选择'
+    },
+    value: {
+      type: Array
     }
   },
   data () {
     return {
+      flag: 'inner', // 内 inner  外outside
       tags: [],
       reqStatus: false,
       tagData: []
@@ -48,8 +48,27 @@ export default {
   },
   watch: {
     tags (val) {
-      this.$emit('select', val)
+      // 内部数据和外部不一样, 修改外部数据
+      if (val !== this.value) {
+        this.$emit('update:value', val)
+        return
+      }
+      // 传入参数修改，不派发
+      if (this.flag === 'outside') {
+        this.flag = 'inner'
+        return
+      }
+      this.$emit('update:value', val)
+    },
+    value: {
+      handler: function (val) {
+        this.flag = 'outside' // 标识为传入参数修改
+        this.tags = val
+      }
     }
+  },
+  created () {
+    this.getTags()
   },
   methods: {
     getTags () {
