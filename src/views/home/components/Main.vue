@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     getCarouselList () {
-      getCarouselApi().then(res => {
+      getCarouselApi({ status: 1 }).then(res => {
         this.carouselLoading = false
         if (res.success) {
           this.carouselList = res.content

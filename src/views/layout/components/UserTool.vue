@@ -8,14 +8,22 @@
     <!-- 登录后显示 -->
     <div v-else class="user">
       <el-popover
+        v-model="popoverVisible"
         popper-class="user-tool-popover"
         placement="bottom-start"
         width="120"
         trigger="click"
+        @show="handleClick('show-create-panel')"
       >
         <ul class="create-type-list">
-          <li v-for="(item, index) in createTypeList.filter(item => item.show)" :key="index" :class="{[item.className]: item.className, item}">
-            <router-link :to="item.path">{{ item.label }}</router-link>
+          <li
+            v-for="(item, index) in createTypeList.filter(item => item.show)"
+            :key="index"
+            :class="{[item.className]: item.className, item}"
+            style="cursor: pointer;"
+            @click="handleClick('goto', item)"
+          >
+            <span>{{ item.label }}</span>
           </li>
         </ul>
         <span slot="reference" class="bt-created">
@@ -96,6 +104,7 @@ import PageForm from '@/components/PageForm'
 import ValidCode from '@/components/ValidCode'
 import { _setCookie } from '@/common/js/storage'
 import { registeredApi, loginApi } from '@/api/user'
+import { getDraftTotalsApi } from '@/api/draft'
 export default {
   name: 'User',
   components: {
@@ -131,6 +140,7 @@ export default {
       }
     }
     return {
+      popoverVisible: false,
       visible: false,
       // 验证码
       validCode: '',
@@ -144,7 +154,7 @@ export default {
         { label: '发头条', show: false, path: '/write?type=submit' },
         { label: '写文章', show: true, path: '/write?type=write' },
         { label: '记笔记', show: false, path: '/write?type=record' },
-        { label: '草稿箱', show: true, path: '/draft', className: 'draft' }
+        { label: '草稿箱(0)', show: true, path: '/draft', className: 'draft' }
       ],
       // 用户菜单
       userMenu: [
@@ -261,6 +271,20 @@ export default {
           break
         case 'loginOut':
           this.$store.dispatch('user/loginOut')
+          break
+        case 'goto':
+          this.popoverVisible = false
+          this.$router.push(data.path)
+          break
+        case 'show-create-panel':
+          getDraftTotalsApi().then(res => {
+            if (!res.success) return
+            this.createTypeList.forEach(item => {
+              if (/draft/.test(item.path)) {
+                item.label = `草稿箱(${res.content.totals})`
+              }
+            })
+          })
           break
       }
     },

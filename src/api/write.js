@@ -18,6 +18,14 @@ export function updateQuestionApi (data) {
   })
 }
 
+// 删除问题
+export function deleteQuestionApi (id) {
+  return request({
+    url: `/api/question/delete/${id}`,
+    method: 'delete'
+  })
+}
+
 // 创建文章
 export function createArticleApi (data) {
   return request({
@@ -33,5 +41,13 @@ export function updateArticleApi (data) {
     url: '/api/article/update',
     method: 'put',
     data
+  })
+}
+
+// 删除文章
+export function deleteArticleApi (id) {
+  return request({
+    url: `/api/Article/delete/${id}`,
+    method: 'delete'
   })
 }
