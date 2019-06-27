@@ -15,3 +15,20 @@ export function getDraftApi () {
     method: 'get'
   })
 }
+
+// 舍弃草稿
+export function giveUpDraftApi (data) {
+  return request({
+    url: `api/draft/giveUp`,
+    method: 'delete',
+    data
+  })
+}
+
+// 舍弃全部草稿
+export function giveUpAllDraftApi () {
+  return request({
+    url: `api/draft/giveUpAll`,
+    method: 'delete'
+  })
+}

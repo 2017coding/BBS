@@ -4,7 +4,7 @@
     <div class="main">
       <div class="head">
         <p class="name">我的草稿</p>
-        <a class="give-up-all">舍弃全部草稿</a>
+        <a class="give-up-all" @click="handleClick('give-up-all')">舍弃全部草稿</a>
       </div>
       <ul class="draft-list">
         <li v-for="(item, index) in draftList" :key="index" class="item">
@@ -16,15 +16,15 @@
             >
               {{ getTag(item.dataType) }}
             </el-tag>
-            <p class="title">{{ item.title }}</p>
+            <router-link :to="`/write?type=write&id=${item.id}`" class="title">{{ item.title }}</router-link>
           </div>
           <div class="more">
             <div class="more-left">
               <span class="save-time">保存于{{ $fn.timeView(item.create_time) }}</span>
               ·
-              <a class="update">编辑</a>
+              <router-link :to="`/write?type=write&id=${item.id}`" class="update">编辑</router-link>
             </div>
-            <a class="give-up">舍弃</a>
+            <a class="give-up" @click="handleClick('give-up', item)">舍弃</a>
           </div>
         </li>
       </ul>
@@ -37,7 +37,7 @@
 
 <script>
 import Notices from '../components/Notices'
-import { getDraftApi } from '@/api/draft'
+import { getDraftApi, giveUpDraftApi, giveUpAllDraftApi } from '@/api/draft'
 export default {
   components: {
     Notices
@@ -76,6 +76,50 @@ export default {
           })
         }
       })
+    },
+    handleClick (type, data) {
+      switch (type) {
+        case 'give-up':
+          this.$confirm(`你要舍弃草稿「${data.title}」么??`, '舍弃草稿', {
+            confirmButtonText: '舍弃',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            giveUpDraftApi({ dataType: data.dataType, id: data.id }).then(res => {
+              if (res.success) {
+                this.getDraft()
+              }
+              this.$message({
+                showClose: true,
+                message: res.message,
+                type: res.success ? 'success' : 'error',
+                duration: 3500
+              })
+            })
+          }).catch(e => {
+          })
+          break
+        case 'give-up-all':
+          this.$confirm(`你确定要舍弃全部草稿么？`, '舍弃全部草稿', {
+            confirmButtonText: '舍弃',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            giveUpAllDraftApi().then(res => {
+              if (res.success) {
+                this.getDraft()
+              }
+              this.$message({
+                showClose: true,
+                message: res.message,
+                type: res.success ? 'success' : 'error',
+                duration: 3500
+              })
+            })
+          }).catch(e => {
+          })
+          break
+      }
     }
   }
 }
