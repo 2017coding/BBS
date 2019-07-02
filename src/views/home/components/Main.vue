@@ -6,6 +6,7 @@
           <!-- <span>{{item.title}}</span> -->
           <img :src="item.image" style="width: 100%" @click="handClick('carousel', item)">
         </el-carousel-item>
+        <p v-if="!carouselList.length" class="no-carousel">欢迎来到LLyh</p>
       </el-carousel>
     </div>
     <article-config />
@@ -78,6 +79,12 @@ export default {
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
+  }
+  .no-carousel{
+    height: 100%;
+    line-height: 150px;
+    text-align: center;
+    font-size: 24px;
   }
 }
 </style>

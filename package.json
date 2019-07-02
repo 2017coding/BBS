@@ -26,7 +26,7 @@
     "vuex": "~3.0.1",
     "mavon-editor": "~2.6.17",
     "marked": "~0.6.2",
-    "socket.io-client": "2.2.0"
+    "mqtt": "^2.18.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",

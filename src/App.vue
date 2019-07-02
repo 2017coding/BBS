@@ -5,8 +5,8 @@
 </template>
 
 <script>
+import mqtt from 'mqtt'
 import { mapGetters } from 'vuex'
-// import io from 'socket.io-client'
 export default {
   name: 'App',
   computed: {
@@ -20,10 +20,7 @@ export default {
     }
   },
   mounted () {
-    // var socket = io('https://www.lyh.red')
-    // socket.on('connect', function () {
-    //   console.log(1)
-    // })
+    this.initMqtt()
   },
   methods: {
     invalidRoute (val) {
@@ -41,6 +38,29 @@ export default {
           return
         }
       }
+    },
+    initMqtt () {
+      const URL = process.env.VUE_APP_TYPE === 'localhost' ? '10.61.0.69' : 'www.lyh.red'
+      const client = mqtt.connect(`mqtt://${URL}:1212`)
+      // 连接
+      client.on('connect', () => {
+        console.log('连接' + new Date())
+        client.subscribe('/11123', function (err) {
+          if (!err) {
+            client.publish('/11123', 'Hello mqtt')
+          }
+          console.log('订阅成功')
+        })
+      })
+      // 获取到消息
+      client.on('message', (topic, message) => {
+        // message is Buffer
+        console.log(message.toString())
+      })
+      // 断开自动重连
+      client.on('close', () => {
+        console.log('close重新连接' + new Date())
+      })
     }
   }
 }
