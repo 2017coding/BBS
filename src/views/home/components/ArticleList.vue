@@ -55,8 +55,15 @@ export default {
   },
   created () {
     this.getList()
+    this.receiveEventBus()
   },
   methods: {
+    receiveEventBus () {
+      // 接收eventBus （点击侧边栏，获取符合条件的数据）
+      this.$eventBus.$on('sidebar-click', data => {
+        // this.getList()
+      })
+    },
     getList () {
       const listInfo = this.listInfo
       getArticleListApi(listInfo.query).then(res => {

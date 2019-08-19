@@ -7,9 +7,7 @@
         icon="el-icon-plus"
         size="medium"
       >提问题</el-button>
-      <tabs :tab-list="tabList">
-        <questions-item v-for="(item, index) in questionList" :key="index" :data="item" />
-      </tabs>
+      <tabs />
     </div>
     <div class="right">
       <Notices />
@@ -22,7 +20,6 @@
 
 <script>
 import Tabs from './components/Tabs'
-import QuestionsItem from './components/QuestionsItem'
 import Notices from './components/Notices'
 import Advertising from './components/Advertising'
 import Lives from './components/Lives'
@@ -31,7 +28,6 @@ import Activity from './components/Activity'
 export default {
   components: {
     Tabs,
-    QuestionsItem,
     Notices,
     Advertising,
     Lives,
@@ -39,14 +35,10 @@ export default {
   },
   data () {
     return {
-      tabList: [
-        { id: 1, name: '最新回答', icon: '' },
-        { id: 2, name: '等待回答', icon: '' },
-        { id: 3, name: '热门回答', icon: '' }
-        // { id: 4, name: '付费回答', icon: '' },
-        // { id: 5, name: '众审中心', icon: '' }
-      ]
     }
+  },
+  methods: {
+    // 获取问答列表
   }
 }
 </script>

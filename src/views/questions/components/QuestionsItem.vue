@@ -1,21 +1,21 @@
 <template>
   <div class="questions-item">
     <div class="Votes">
-      <span>0</span>
-      <span>得票</span>
+      <span class="">0</span>
+      <span class="">得票</span>
     </div>
     <div class="answer">
-      <span>0</span>
-      <span>{{ data.resolve ? '回答' : '解决' }}</span>
+      <span class="">0</span>
+      <span class="">{{ data.resolve ? '回答' : '解决' }}</span>
     </div>
     <div class="views">
-      <span>0</span>
-      <span>浏览</span>
+      <span class="">0</span>
+      <span class="">浏览</span>
     </div>
     <div class="info">
       <p>
-        <span>0</span>
-        <span>0</span>
+        <span class="">0</span>
+        <span class="">0</span>
       </p>
       <p class="title">0</p>
       <span class="tag">0</span>
@@ -36,5 +36,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.questions-item{
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid rgb(245, 245, 245);
+  .Votes{
+  }
+}
 </style>

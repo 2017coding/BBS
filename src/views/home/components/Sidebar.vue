@@ -66,7 +66,10 @@ export default {
     getTagType () {
       getTechSquareApi({ status: 1 }).then(res => {
         if (res.success) {
-          this.technologyClass = res.content
+          this.technologyClass = res.content.map(item => {
+            item.type = 2
+            return item
+          })
           this.technologyClass.push(
             { id: '更多标签', type: 3, name: '更多标签', icon: 'el-icon-albb-discount' }
           )

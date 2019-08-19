@@ -9,6 +9,12 @@ import mqtt from 'mqtt'
 import { mapGetters } from 'vuex'
 export default {
   name: 'App',
+  data () {
+    return {
+      topic: '',
+      client: null
+    }
+  },
   computed: {
     ...mapGetters([
       'userInfo'
@@ -17,10 +23,15 @@ export default {
   watch: {
     $route (val) {
       this.invalidRoute(val)
+    },
+    // 用户登录才会开始订阅, 退出登录则关闭mqtt
+    userInfo (val) {
+      if (!val) {
+        this.disconnectMqtt()
+        return
+      }
+      this.initMqtt()
     }
-  },
-  mounted () {
-    this.initMqtt()
   },
   methods: {
     invalidRoute (val) {
@@ -40,27 +51,43 @@ export default {
       }
     },
     initMqtt () {
-      const URL = process.env.VUE_APP_TYPE === 'localhost' ? '10.61.0.69' : 'www.lyh.red'
-      const client = mqtt.connect(`mqtt://${URL}:1212`)
+      const URL = process.env.VUE_APP_TYPE === 'localhost' ? '127.0.0.1:1212' : 'www.lyh.red/mqttwss'
+      // 在不同协议下，使用不同的连接方式
+      const protocol = location.protocol === 'http:' ? 'mqtt:' : 'mqtts:'
+      this.client = mqtt.connect(`${protocol}//${URL}`)
+      const TopicList = [
+        `/chat/user/${this.userInfo.id}`,
+        `/chat/group/#`,
+        `/message/user/${this.userInfo.id}`,
+        `/message/audit/#`
+      ]
       // 连接
-      client.on('connect', () => {
+      this.client.on('connect', () => {
         console.log('连接' + new Date())
-        client.subscribe('/11123', function (err) {
-          if (!err) {
-            client.publish('/11123', 'Hello mqtt')
-          }
-          console.log('订阅成功')
+        TopicList.forEach(topic => {
+          this.client.subscribe(topic, function (err) {
+            if (!err) {
+              console.log('订阅成功: ' + topic)
+            }
+          })
         })
       })
       // 获取到消息
-      client.on('message', (topic, message) => {
+      this.client.on('message', (topic, message) => {
         // message is Buffer
         console.log(message.toString())
       })
       // 断开自动重连
-      client.on('close', () => {
+      this.client.on('close', () => {
         console.log('close重新连接' + new Date())
       })
+    },
+    // 断开连接
+    disconnectMqtt () {
+      if (!this.client) return
+      this.client.connected = false
+      this.client.end(true)
+      console.log('中断当前连接' + new Date())
     }
   }
 }

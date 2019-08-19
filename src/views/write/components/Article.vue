@@ -91,6 +91,17 @@ export default {
     // 监听到外部的提交指令，发布文章
     'commit' (val) {
       const form = this.form
+      const checkResult = this.check(form)
+      if (!checkResult.success) {
+        this.$message({
+          showClose: true,
+          message: checkResult.message,
+          type: 'error',
+          duration: 3500
+        })
+        this.$emit('update:btLoading', false)
+        return
+      }
       const api = form.id ? updateArticleApi : createArticleApi
       api({ ...form, flag: 3 }).then(res => {
         this.$emit('update:btLoading', false)
@@ -139,6 +150,28 @@ export default {
           this.$emit('update:writeStatus', 'unfinish')
         })
       }, 1000)
+    },
+    validateFrom () {
+
+    },
+    check (form) {
+      const arr = [
+        { label: '类型', value: form.type, rules: ['notnull'] },
+        { label: '文章标题', value: form.title, rules: ['notnull'] },
+        // { label: '专栏', value: form.column_id, rules: ['notnull', 'noChinese']},
+        { label: '标签', value: form.tags, rules: ['notnull'] },
+        { label: '内容', value: form.content, rules: ['notnull'] }
+      ]
+      let success = true
+      let message
+      for (const item of arr) {
+        if (!this.$validate(item).success) {
+          message = this.$validate(item).message
+          success = false
+          return { success, message }
+        }
+      }
+      return { success, message }
     }
   }
 }
