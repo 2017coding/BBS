@@ -33,6 +33,7 @@
           <router-link v-if="userInfo && articleInfo.create_user === userInfo.id" :to="`/write?type=write&id=${articleInfo.id}`" class="update">编辑</router-link>
         </span>
       </div>
+      <!-- 文章内容渲染 -->
       <div class="markdown" v-html="marked(articleInfo.content)" />
       <div class="handle">
         <div class="">
@@ -53,18 +54,7 @@
         </ul>
       </div>
       <!-- 评论 -->
-      <div v-if="userInfo" class="comments">
-        <p class="title">评论</p>
-        <div class="content">
-          <i :style="`background-image: url(${userInfo.avatar})`" class="avatar" />
-          <div class="handle">
-            <el-input type="textarea" :rows="3" placeholder="文明社会，理性评论" />
-            <p style="width: 100%; text-align: right">
-              <span class="release">发布评论</span>
-            </p>
-          </div>
-        </div>
-      </div>
+      <comments-list v-if="userInfo" :article-id="$route.params.id" :article-auth="articleInfo.create_user" />
     </div>
   </div>
 </template>
@@ -73,10 +63,12 @@
 import { getArticleInfoApi, getArticleListApi } from '@/api/home'
 import { mapGetters } from 'vuex'
 import SideWidget from './components/SideWidget'
+import CommentsList from './components/CommentsList'
 import marked from '@/common/js/marked'
 export default {
   components: {
-    SideWidget
+    SideWidget,
+    CommentsList
   },
   data () {
     return {
@@ -287,48 +279,6 @@ export default {
           .recommended-article{
             opacity: 1;
             text-decoration: underline;
-          }
-        }
-      }
-    }
-    .comments{
-      margin-bottom: 40px;
-      .title{
-        font-size: 18px;
-        font-weight: 300;
-        color: rgb(50, 50, 50);
-        margin-bottom: 20px;
-      }
-      .content{
-        display: flex;
-        padding: 10px;
-        border: 1px solid rgb(240, 240, 240);
-        border-radius: 5px;
-        background: rgb(248, 248, 248);
-        .avatar{
-          display: inline-block;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background-size: cover;
-          background-position: center;
-        }
-        .handle{
-          margin-left: 10px;
-          margin-bottom: 0px;
-          flex: 1;
-          .release{
-            margin-top: 10px;
-            display: inline-block;
-            padding: 0 12px;
-            cursor: pointer;
-            height: 34px;
-            line-height: 34px;
-            font-weight: 500;
-            border-radius: 5px;
-            color: white;
-            background: red;
-            user-select: none;
           }
         }
       }
