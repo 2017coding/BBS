@@ -12,7 +12,7 @@
               ·
               <span class="replier-time">{{ $fn.timeView(item.create_time) }}</span>
             </div>
-            <div class="more">
+            <div v-if="userInfo" class="more">
               <i class="el-icon-albb-flag" @click="handleClick('report', item)" />
               <i v-if="item.create_user === userInfo.id" class="el-icon-albb-delete1" @click="handleClick('delete', item)" />
             </div>
@@ -20,14 +20,38 @@
           <div class="replier-content">
             {{ item.content }}
           </div>
-          <div class="replier-more">
+          <div v-if="userInfo" class="replier-more">
             <span class="praise"><i class="el-icon-albb-good" /></span>
-            <span class="reply">回复</span>
+            <span class="reply" @click="handleClick('reply', item)">回复</span>
           </div>
+          <ul class="reply-list">
+            <li v-for="(item1, index1) in item.children" :key="index1" class="reply-item">
+              <!-- <div class="reply-content">
+                {{ item1.content }}
+              </div> -->
+              <span class="reply-user">{{ item1.replier_name }}</span>
+              <span v-if="item1.create_user === articleAuth" class="tag original">作者</span>
+              <br>
+              <span>回复</span>
+              <span class="by-reply-user">{{ item1.by_replier_name }}</span>
+              <span v-if="item1.p_user_id === articleAuth" class="tag original">作者</span>:
+              {{ item1.content }}
+              <br>
+              <span class="reply-time">{{ $fn.timeView(item1.create_time) }}</span>
+              <div v-if="userInfo" class="reply-more">
+                <span class="praise"><i class="el-icon-albb-good" /></span>
+                <span class="reply" @click="handleClick('reply', item)">回复</span>
+              </div>
+            </li>
+            <div v-if="replyInfo.pid === item.id" class="reply-handle">
+              <el-input v-model="replyInfo.content" type="textarea" :rows="1" placeholder="文明社会，理性评论" />
+              <el-button class="reply-bt" size="mini" @click="handleClick('addReply', item)">添加回复</el-button>
+            </div>
+          </ul>
         </div>
       </li>
     </ul>
-    <div class="release">
+    <div v-if="userInfo" class="release">
       <i :style="`background-image: url(${userInfo.avatar})`" class="avatar" />
       <div class="handle">
         <el-input v-model="commentsInfo.data.content" type="textarea" :rows="3" placeholder="文明社会，理性评论" />
@@ -66,6 +90,12 @@ export default {
           p_user_id: '',
           content: ''
         }
+      },
+      replyInfo: {
+        article_id: '',
+        pid: '',
+        p_user_id: '',
+        content: ''
       }
     }
   },
@@ -76,20 +106,36 @@ export default {
   },
   mounted () {
     this.init()
-    this.getComments(this.commentsInfo.data)
+    this.getComments()
   },
   methods: {
     init () {
       const commentsData = this.commentsInfo.data
       commentsData.article_id = this.articleId
-      commentsData.pid = 0
     },
     handleClick (type, data) {
       const commentsData = this.commentsInfo.data
+      const replyInfo = this.replyInfo
       switch (type) {
         case 'release':
+          commentsData.pid = 0
           commentsData.p_user_id = 0
-          this.releaseComments()
+          this.releaseComments(commentsData)
+          break
+        case 'reply':
+          replyInfo.article_id = this.articleId
+          replyInfo.pid = data.id
+          replyInfo.p_user_id = data.create_user
+          break
+        case 'addReply':
+          this.releaseComments(this.replyInfo)
+          // 清除数据
+          this.replyInfo = {
+            article_id: '',
+            pid: '',
+            p_user_id: '',
+            content: ''
+          }
           break
         case 'delete':
           this.deleteComments(data.id)
@@ -99,9 +145,22 @@ export default {
     // 获取评论
     getComments (query) {
       const commentsInfo = this.commentsInfo
-      getArticleCommentsApi(query).then(res => {
+      getArticleCommentsApi({
+        article_id: this.articleId
+      }).then(res => {
         if (res.success) {
-          commentsInfo.list = res.content
+          res.content.forEach(item => {
+            if (item.pid === 0) {
+              item.children = []
+            }
+            res.content.forEach(item1 => {
+              if (item.id === item1.pid) {
+                item.children = item.children || []
+                item.children.push(item1)
+              }
+            })
+          })
+          commentsInfo.list = res.content.filter(item => item.pid === 0)
           commentsInfo.totals = res.totals
         } else {
           commentsInfo.listSuccess = false
@@ -111,12 +170,12 @@ export default {
       })
     },
     // 创建评论
-    releaseComments () {
+    releaseComments (query) {
       const commentsData = this.commentsInfo.data
-      createArticleCommentsApi(commentsData).then(res => {
+      createArticleCommentsApi(query).then(res => {
         if (res.success) {
           commentsData.content = ''
-          this.getComments(commentsData)
+          this.getComments()
         } else {
           this.$message({
             showClose: true,
@@ -129,14 +188,14 @@ export default {
     },
     // 删除评论
     deleteComments (id) {
-      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该评论以及评论下的回复, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         deleteArticleCommentsApi(id).then(res => {
           if (res.success) {
-            this.getComments(this.commentsInfo.data)
+            this.getComments()
           }
           this.$message({
             showClose: true,
@@ -195,7 +254,7 @@ export default {
       .content{
         margin-left: 10px;
         flex: 1;
-        .replier-head, .replier-content, .replier-more{
+        .replier-head, .replier-content, .replier-more, .reply-list{
           margin-bottom: 10px;
         }
         .replier-head{
@@ -219,6 +278,35 @@ export default {
           .praise, .reply{
             padding-right: 10px;
             cursor: pointer;
+          }
+        }
+        .reply-list{
+          .reply-item{
+            padding: 10px 20px;
+            line-height: 1.5;
+            background-color: rgb(245, 245, 245);
+            border-bottom: 1px dashed rgb(200, 200, 200);
+            .reply-user, .by-reply-user{
+              color: red;
+              cursor: pointer;
+              &:hover{
+                text-decoration: underline;
+              }
+            }
+            .reply-more{
+              .praise, .reply{
+                padding-right: 10px;
+                cursor: pointer;
+              }
+            }
+          }
+          .reply-handle{
+            display: flex;
+            padding: 10px;
+            background-color: rgb(245, 245, 245);
+            .reply-bt{
+              margin-left: 10px;
+            }
           }
         }
       }

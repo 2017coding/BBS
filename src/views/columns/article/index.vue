@@ -54,7 +54,7 @@
         </ul>
       </div>
       <!-- 评论 -->
-      <comments-list v-if="userInfo" :article-id="$route.params.id" :article-auth="articleInfo.create_user" />
+      <comments-list :article-id="$route.params.id" :article-auth="articleInfo.create_user" />
     </div>
   </div>
 </template>
