@@ -6,9 +6,7 @@
         <span class="yh">yh</span>
       </p>
       <div class="mid">
-        <transition name="el-fade-in-linear">
-          <navbar-item v-if="!searchFocus" />
-        </transition>
+        <navbar-item />
         <search />
       </div>
       <user-tool />
@@ -26,22 +24,6 @@ export default {
     NavbarItem,
     Search,
     UserTool
-  },
-  data () {
-    return {
-      searchFocus: false
-    }
-  },
-  mounted () {
-    this.receiveEventBus()
-  },
-  methods: {
-    receiveEventBus () {
-      // 接收eventBus
-      this.$eventBus.$on('search-focus', val => {
-        this.searchFocus = val
-      })
-    }
   }
 }
 </script>
@@ -80,6 +62,10 @@ export default {
       .mid{
         display: flex;
         flex: 1;
+        .hide{
+          width: 0;
+          transition: width .3s;
+        }
       }
     }
     .tags{

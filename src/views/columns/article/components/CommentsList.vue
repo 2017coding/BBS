@@ -51,12 +51,14 @@
         </div>
       </li>
     </ul>
-    <div v-if="userInfo" class="release">
-      <i :style="`background-image: url(${userInfo.avatar})`" class="avatar" />
+    <div class="release">
+      <i v-if="userInfo" :style="`background-image: url(${userInfo.avatar})`" class="avatar" />
       <div class="handle">
         <el-input v-model="commentsInfo.data.content" type="textarea" :rows="3" placeholder="文明社会，理性评论" />
         <p style="width: 100%; text-align: right">
-          <span class="release" @click="handleClick('release')">发布评论</span>
+          <el-button type="primary" class="release-bt" :disabled="!userInfo" @click="userInfo ? handleClick('release') : ''">
+            {{ userInfo ? '发布评论' : '登录后可发布评论' }}
+          </el-button>
         </p>
       </div>
     </div>
@@ -119,7 +121,7 @@ export default {
       switch (type) {
         case 'release':
           commentsData.pid = 0
-          commentsData.p_user_id = 0
+          commentsData.p_user_id = this.articleAuth
           this.releaseComments(commentsData)
           break
         case 'reply':
@@ -330,17 +332,17 @@ export default {
       margin-left: 10px;
       margin-bottom: 0px;
       flex: 1;
-      .release{
+      .release-bt{
         margin-top: 10px;
-        display: inline-block;
-        padding: 0 12px;
-        cursor: pointer;
-        height: 34px;
-        line-height: 34px;
-        font-weight: 500;
-        border-radius: 5px;
-        color: white;
-        background: red;
+        // display: inline-block;
+        // padding: 0 12px;
+        // cursor: pointer;
+        // height: 34px;
+        // line-height: 34px;
+        // font-weight: 500;
+        // border-radius: 5px;
+        // color: white;
+        // background: red;
         user-select: none;
       }
     }

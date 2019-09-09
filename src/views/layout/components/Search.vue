@@ -49,7 +49,7 @@ export default {
   .search{
     position: relative;
     flex: 1;
-    transition: all 0.25s ease;
+    // transition: width 0.25s ease;
     .search-input{
       display: block;
       width: 100%;

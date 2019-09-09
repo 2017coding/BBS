@@ -9,6 +9,12 @@
 <script>
 export default {
   name: 'BackToTop',
+  props: {
+    leaveTop: {
+      type: Number,
+      default: 300
+    }
+  },
   data () {
     return {
       show: false,
@@ -18,7 +24,7 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', () => {
-      this.show = this.getScrollTop() > 500
+      this.show = this.getScrollTop() > this.leaveTop
     })
   },
   methods: {
@@ -30,7 +36,7 @@ export default {
       if (currentScroll > 0) {
         window.scrollTo(0, currentScroll - this.speed)
         // 加速
-        this.speed += 5
+        this.speed += 2
         this.timer = requestAnimationFrame(() => {
           this.backToTop()
         })

@@ -1,5 +1,5 @@
 <template>
-  <nav class="menu">
+  <nav class="menu" :class="className">
     <template v-for="item in routes.filter(item => item.meta.isMenu)">
       <!-- 一级菜单循环 -->
       <template v-if="hasOneShowingChildren(item, item.children)">
@@ -49,10 +49,27 @@ export default {
       routes,
       triggerType: 'click', // click || over
       showSubmenu: false,
-      timer: []
+      timer: [],
+      searchFocus: false
     }
   },
+  computed: {
+    className () {
+      return {
+        hide: this.searchFocus
+      }
+    }
+  },
+  mounted () {
+    this.receiveEventBus()
+  },
   methods: {
+    receiveEventBus () {
+      // 接收eventBus
+      this.$eventBus.$on('search-focus', val => {
+        this.searchFocus = val
+      })
+    },
     resolvePath (item) {
       const childrenPath = item.children && item.children[0] ? '/' + item.children[0].path : ''
       return item.path || childrenPath.replace('//', '/')
@@ -105,7 +122,14 @@ export default {
     font-weight: bold!important;
   }
   .menu{
+    width: 400px;
     padding-right: 35px;
+    transition: width 0.25s ease;
+    white-space: nowrap;
+    &.hide{
+      width: 0px;
+      font-size: 0;
+    }
     .menu-title{
       padding: 10px 20px;
       cursor: pointer;

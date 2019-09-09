@@ -10,8 +10,8 @@
           </div>
           <!-- <div class="img" :style="`background-image: url(${require('@/assets/image/home/b1.png')})`" /> -->
         </div>
-        <div class="info">
-          <div class="praise">
+        <div class="info" @click.stop="">
+          <div class="praise" @click.stop="handleClick('praise', item)">
             <span class="wrap"><i class="el-icon-albb-good" /></span>
             <span v-if="item.praiseNums > 0">
               <span class="unit">x</span>
@@ -20,7 +20,7 @@
             <span class="dot"> · </span>
             <span class="votes-word">赞</span>
           </div>
-          <div class="author">{{ item.create_user_name }}</div>
+          <div class="author" @click.stop="handleClick('clickAuthor', item)">{{ item.create_user_name }}</div>
           <span class="dot" style="padding: 0 5px">·</span>
           <div class="release-time">{{ $fn.timeView(item.create_time) }}</div>
         </div>
@@ -83,6 +83,14 @@ export default {
       this.$router.push({
         path: `/columns/article/${id}`
       })
+    },
+    handleClick (type, data) {
+      switch (type) {
+        case 'praise':
+          break
+        case 'clickAuthor':
+          break
+      }
     }
   }
 }
@@ -135,6 +143,7 @@ export default {
         transition: all .3s linear;
         .praise{
           cursor: pointer;
+          user-select: none;
           .wrap{
             display: inline-block;
             width: 24px;
